@@ -1,0 +1,42 @@
+"use client"
+
+import * as React from "react"
+import { Moon, Sun } from "lucide-react"
+import { useTheme } from "next-themes"
+import { Button } from "@/components/ui/button"
+
+export function ThemeToggle() {
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return (
+      <Button variant="ghost" size="icon" className="h-9 w-9 rounded-lg" disabled>
+        <Sun className="h-5 w-5" />
+      </Button>
+    )
+  }
+
+  const isDark = theme === "dark"
+
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      className="h-9 w-9 text-white hover:text-olive-50 hover:bg-white/15 rounded-lg transition-all duration-200"
+      title={isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
+    >
+      {isDark ? (
+        <Sun className="h-5 w-5 transition-transform duration-200" />
+      ) : (
+        <Moon className="h-5 w-5 transition-transform duration-200" />
+      )}
+      <span className="sr-only">{isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}</span>
+    </Button>
+  )
+}
