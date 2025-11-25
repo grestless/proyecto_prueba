@@ -1,31 +1,33 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import Link from "next/link"
-import { ArrowRight, Shield, Zap, PackageIcon, Award, Users, Truck, CreditCard } from 'lucide-react'
-import Image from "next/image"
+import { CardContent } from "@/components/ui/card"
+
+import { Card } from "@/components/ui/card"
+
+import { useState, useEffect, useCallback } from "react"
 import { Header } from "@/components/header"
-import { motion } from "framer-motion"
-import { useEffect, useState } from "react"
-import { mockProducts } from "@/lib/mock-products"
-import { createClient } from "@/lib/supabase/server"
+import { Footer } from "@/components/footer"
 import { ProductCard } from "@/components/product-card"
-import { ProductFilters } from "@/components/product-filters"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { ArrowRight, ChevronRight, Truck, Shield, Leaf, Award, Star } from "lucide-react"
+import Link from "next/link"
+import { motion } from "framer-motion"
 import type { Product } from "@/types"
+import { mockProducts } from "@/lib/mock-products"
 
 export default function HomePage() {
+  const [currentBenefit, setCurrentBenefit] = useState(0)
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function loadProducts() {
       try {
-        const featured = mockProducts.slice(0, 6)
+        const featured = mockProducts.filter((p) => p.featured).slice(0, 6)
         setFeaturedProducts(featured)
       } catch (error) {
-        console.error("[v0] Error loading products:", error)
+        console.error("Error loading products:", error)
       } finally {
         setLoading(false)
       }
@@ -49,7 +51,7 @@ export default function HomePage() {
       iconBg: "from-forest-500 to-forest-600",
     },
     {
-      icon: Users,
+      icon: Star,
       title: "Ofertas Exclusivas",
       description: "Descuentos especiales y acceso anticipado a colecciones para miembros",
       gradient: "from-forest-700 via-forest-600 to-forest-700",
@@ -63,13 +65,35 @@ export default function HomePage() {
       iconBg: "from-forest-400 to-forest-500",
     },
     {
-      icon: CreditCard,
-      title: "Pagos Flexibles",
-      description: "Hasta 12 cuotas sin interés y múltiples medios de pago disponibles",
+      icon: Leaf,
+      title: "Sostenibilidad",
+      description: "Todos nuestros productos están hechos con materiales sostenibles",
       gradient: "from-forest-800 via-forest-700 to-forest-800",
       iconBg: "from-forest-700 to-forest-800",
     },
+    {
+      icon: Shield,
+      title: "Garantía Total",
+      description: "Devoluciones sin preguntas. Cambios ilimitados. Tu satisfacción garantizada.",
+      gradient: "from-forest-600 via-forest-500 to-forest-600",
+      iconBg: "from-forest-500 to-forest-600",
+    },
+    {
+      icon: ChevronRight,
+      title: "Descubre Más",
+      description: "Navega por nuestra amplia gama de productos y encuentra tu estilo",
+      gradient: "from-forest-700 via-forest-600 to-forest-700",
+      iconBg: "from-forest-600 to-forest-700",
+    },
   ]
+
+  const handleNextBenefit = useCallback(() => {
+    setCurrentBenefit((prev) => (prev + 1) % benefits.length)
+  }, [benefits.length])
+
+  const handlePrevBenefit = useCallback(() => {
+    setCurrentBenefit((prev) => (prev - 1 + benefits.length) % benefits.length)
+  }, [benefits.length])
 
   return (
     <>
@@ -104,21 +128,11 @@ export default function HomePage() {
                 <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4 md:gap-6 pt-6 md:pt-8">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center">
-                      <Zap className="h-5 w-5 sm:h-6 sm:w-6 text-forest-400" />
+                      <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6 text-forest-400" />
                     </div>
                     <div>
-                      <p className="text-xs sm:text-sm font-medium text-white">Envío Express</p>
-                      <p className="text-[10px] sm:text-xs text-zinc-500">24-48 horas</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center">
-                      <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-forest-400" />
-                    </div>
-                    <div>
-                      <p className="text-xs sm:text-sm font-medium text-white">Garantía Total</p>
-                      <p className="text-[10px] sm:text-xs text-zinc-500">30 días de devolución</p>
+                      <p className="text-xs sm:text-sm font-medium text-white">Explorar colección</p>
+                      <p className="text-[10px] sm:text-xs text-zinc-500">Descubre más productos</p>
                     </div>
                   </div>
                 </div>
@@ -209,244 +223,19 @@ export default function HomePage() {
               </div>
 
               <div className="relative z-10 grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 max-w-5xl mx-auto">
-                {/* Card 1: Envío Rápido - MÁS CONTENIDO */}
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.4 }}
-                  className="relative rounded-2xl bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-md p-8 shadow-xl border border-zinc-700/50 hover:border-forest-500/50 transition-all duration-300 group"
-                >
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="inline-flex items-center gap-2 bg-forest-500/20 px-4 py-2 rounded-full border border-forest-500/30">
-                      <Zap className="h-4 w-4 text-forest-400" />
-                      <span className="text-xs font-semibold text-forest-300 uppercase tracking-wider">Express</span>
-                    </div>
-                    <div className="w-10 h-10 rounded-full bg-forest-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <ArrowRight className="h-5 w-5 text-forest-400" />
-                    </div>
-                  </div>
-
-                  <div className="space-y-4 mb-6">
-                    <div className="inline-block px-6 py-4 bg-gradient-to-br from-forest-500 to-forest-600 rounded-2xl shadow-lg">
-                      <div className="text-4xl font-bold text-white mb-1">24-48</div>
-                      <div className="text-xs text-forest-100 font-medium">horas</div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <h3 className="text-xl font-semibold text-white">Envío ultra rápido</h3>
-                    <p className="text-sm text-zinc-400 leading-relaxed">
-                      Delivery express en CABA y GBA. Seguimiento en tiempo real de tu pedido.
-                    </p>
-
-                    <div className="pt-4 space-y-2 border-t border-zinc-700/50">
-                      <div className="flex items-center gap-2 text-xs text-zinc-500">
-                        <div className="w-1.5 h-1.5 rounded-full bg-forest-500" />
-                        <span>Gratis en compras +$50.000</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-zinc-500">
-                        <div className="w-1.5 h-1.5 rounded-full bg-forest-500" />
-                        <span>Tracking GPS incluido</span>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-
-                {/* Card 2: Producto Featured - MÁS CONTENIDO */}
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.5 }}
-                  className="relative rounded-2xl bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-md p-8 shadow-xl border border-zinc-700/50 hover:border-forest-500/50 transition-all duration-300 group"
-                >
-                  {featuredProducts[0] && (
-                    <>
-                      <div className="relative aspect-square rounded-xl overflow-hidden mb-5 bg-zinc-800 shadow-lg">
-                        <Image
-                          src={featuredProducts[0].image_url || "/placeholder.svg"}
-                          alt={featuredProducts[0].name}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                        <div className="absolute top-3 right-3 bg-forest-500 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg">
-                          TOP
-                        </div>
-                        <div className="absolute bottom-3 left-3 right-3">
-                          <div className="flex items-center gap-2">
-                            {featuredProducts[0].sizes?.slice(0, 3).map((size: string) => (
-                              <span
-                                key={size}
-                                className="px-2 py-1 bg-white/20 backdrop-blur-sm rounded text-[10px] text-white font-medium"
-                              >
-                                {size}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="space-y-3">
-                        <div>
-                          <h3 className="text-lg font-semibold text-white mb-1">{featuredProducts[0].name}</h3>
-                          <p className="text-xs text-zinc-400 uppercase tracking-wider">
-                            {featuredProducts[0].category}
-                          </p>
-                        </div>
-
-                        <p className="text-sm text-zinc-400 leading-relaxed line-clamp-2">
-                          {featuredProducts[0].description}
-                        </p>
-
-                        <div className="flex items-center justify-between pt-3 border-t border-zinc-700/50">
-                          <div>
-                            <div className="text-2xl font-bold text-white">
-                              {formatPrice(featuredProducts[0].price)}
-                            </div>
-                            <div className="text-xs text-zinc-500">Stock disponible</div>
-                          </div>
-                          <Button
-                            asChild
-                            size="sm"
-                            className="bg-forest-500 hover:bg-forest-600 text-white rounded-full px-5 h-10 shadow-lg text-xs font-medium"
-                          >
-                            <Link href={`/products/${featuredProducts[0].id}`}>
-                              Ver más
-                              <ArrowRight className="ml-1 h-3 w-3" />
-                            </Link>
-                          </Button>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </motion.div>
-
-                {/* Card 3: Garantía - MÁS CONTENIDO */}
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.6 }}
-                  className="relative rounded-2xl bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 backdrop-blur-md p-8 shadow-xl border border-zinc-700/50 hover:border-forest-500/50 transition-all duration-300 group"
-                >
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="inline-flex items-center gap-2 bg-forest-500/20 px-4 py-2 rounded-full border border-forest-500/30">
-                      <Shield className="h-4 w-4 text-forest-400" />
-                      <span className="text-xs font-semibold text-forest-300 uppercase tracking-wider">Garantía</span>
-                    </div>
-                    <div className="w-10 h-10 rounded-full bg-forest-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <Shield className="h-5 w-5 text-forest-400" />
-                    </div>
-                  </div>
-
-                  <div className="relative aspect-square rounded-2xl overflow-hidden mb-5 bg-gradient-to-br from-forest-500/10 via-forest-600/10 to-forest-500/10 flex items-center justify-center border border-forest-500/20 shadow-inner">
-                    <div className="text-center">
-                      <PackageIcon className="h-16 w-16 text-forest-500/40 mx-auto mb-3" />
-                      <div className="text-3xl font-bold text-forest-400">30</div>
-                      <div className="text-xs text-forest-500/80 font-medium uppercase tracking-wider">días</div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <h3 className="text-xl font-semibold text-white">Garantía total</h3>
-                    <p className="text-sm text-zinc-400 leading-relaxed">
-                      Devoluciones sin preguntas. Cambios ilimitados. Tu satisfacción garantizada.
-                    </p>
-
-                    <div className="pt-4 space-y-2 border-t border-zinc-700/50">
-                      <div className="flex items-center gap-2 text-xs text-zinc-500">
-                        <div className="w-1.5 h-1.5 rounded-full bg-forest-500" />
-                        <span>Reembolso completo</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-zinc-500">
-                        <div className="w-1.5 h-1.5 rounded-full bg-forest-500" />
-                        <span>Cambios sin costo</span>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
+                {featuredProducts.map((product, index) => (
+                  <motion.div
+                    key={product.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                  >
+                    <ProductCard product={product} />
+                  </motion.div>
+                ))}
               </div>
             </motion.div>
-          </div>
-        </section>
-
-        <section className="py-16 md:py-24 bg-zinc-950">
-          <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-12 md:mb-16"
-            >
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-light tracking-tight text-white mb-3 md:mb-4">
-                Explora por categoría
-              </h2>
-              <p className="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto">
-                Encuentra exactamente lo que buscas
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-              {[
-                {
-                  name: "Remeras",
-                  description: "Esenciales para tu guardarropa",
-                  image: "/mannequin-wearing-black-t-shirt-on-olive-green-bac.jpg",
-                },
-                {
-                  name: "Pantalones",
-                  description: "Comodidad y estilo urbano",
-                  image: "/mannequin-wearing-grey-pants-on-dark-grey-backgrou.jpg",
-                },
-                {
-                  name: "Calzado",
-                  description: "Pasos con personalidad",
-                  image: "/mannequin-legs-wearing-shoes-on-light-grey-backgro.jpg",
-                },
-                {
-                  name: "Accesorios",
-                  description: "Detalles que marcan la diferencia",
-                  image: "/female-mannequin-with-handbags-and-accessories-on-.jpg",
-                },
-              ].map((category, index) => (
-                <motion.div
-                  key={category.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                >
-                  <Link href={`/products?category=${category.name}`}>
-                    <Card className="group relative aspect-[3/4] overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-500 cursor-pointer bg-zinc-800">
-                      <div className="absolute inset-0">
-                        <Image
-                          src={category.image || "/placeholder.svg"}
-                          alt={category.name}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-700"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80 group-hover:opacity-70 transition-opacity duration-500" />
-                      </div>
-
-                      <div className="absolute inset-0 flex flex-col justify-end p-6">
-                        <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                          <h3 className="text-3xl font-light text-white mb-2">{category.name}</h3>
-                          <p className="text-sm text-zinc-300 mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                            {category.description}
-                          </p>
-                          <div className="flex items-center text-forest-400 text-sm font-medium">
-                            <span>Explorar colección</span>
-                            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-2 transition-transform" />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="absolute inset-0 border-2 border-forest-500/0 group-hover:border-forest-500/50 rounded-lg transition-all duration-500" />
-                    </Card>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
           </div>
         </section>
 
@@ -589,6 +378,7 @@ export default function HomePage() {
           </div>
         </section>
       </div>
+      <Footer />
     </>
   )
 }

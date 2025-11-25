@@ -4,12 +4,14 @@ export interface Product {
   description: string | null
   price: number // in cents
   image_url: string | null
+  images?: string[]
   category: string | null
   stock: number
   sizes: string[] // Talles disponibles (ej: ['S', 'M', 'L'] o ['38', '40', '42'])
   colors: string[] // Colores disponibles
   created_at: string
-  updated_at: string
+  updated_at?: string
+  featured?: boolean
 }
 
 export interface CartItem {

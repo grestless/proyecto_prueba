@@ -1,17 +1,20 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import type { Product } from "@/types"
-import { ProductDetailModal } from "@/components/product-detail-modal"
+import { useState } from "react"
 
 interface ProductCardProps {
   product: Product
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const [isHovered, setIsHovered] = useState(false)
+
   const formatPrice = (cents: number) => {
     return new Intl.NumberFormat("es-AR", {
       style: "currency",
@@ -19,18 +22,37 @@ export function ProductCard({ product }: ProductCardProps) {
     }).format(cents / 100)
   }
 
+  const hoverImage = product.images && product.images.length > 1 ? product.images[1] : null
+
   return (
-    <ProductDetailModal product={product}>
-      <Card className="group overflow-hidden border-zinc-800 hover:border-forest-500/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-zinc-900 cursor-pointer h-full flex flex-col">
+    <Link href={`/products/${product.id}`}>
+      <Card
+        className="group overflow-hidden border-zinc-800 hover:border-forest-500/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-zinc-900 cursor-pointer h-full flex flex-col"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <div className="relative aspect-[4/5] overflow-hidden bg-zinc-800">
           <Image
             src={product.image_url || "/placeholder.svg?height=400&width=400&query=ropa"}
             alt={product.name}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            className={`object-cover transition-all duration-500 ${
+              isHovered && hoverImage ? "opacity-0 scale-105" : "opacity-100 scale-100"
+            }`}
+            priority
           />
+          {hoverImage && (
+            <Image
+              src={hoverImage || "/placeholder.svg"}
+              alt={`${product.name} - vista alternativa`}
+              fill
+              className={`object-cover transition-all duration-500 ${
+                isHovered ? "opacity-100 scale-105" : "opacity-0 scale-100"
+              }`}
+            />
+          )}
           {product.stock === 0 && (
-            <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+            <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
               <Badge variant="destructive" className="text-lg px-4 py-2">
                 Sin Stock
               </Badge>
@@ -58,7 +80,7 @@ export function ProductCard({ product }: ProductCardProps) {
         </CardContent>
 
         <CardFooter className="p-5 pt-0 mt-auto">
-          <Button 
+          <Button
             variant="default"
             className="w-full bg-forest-600 hover:bg-forest-500 text-white shadow-lg transition-all duration-300"
             disabled={product.stock === 0}
@@ -67,6 +89,6 @@ export function ProductCard({ product }: ProductCardProps) {
           </Button>
         </CardFooter>
       </Card>
-    </ProductDetailModal>
+    </Link>
   )
 }
