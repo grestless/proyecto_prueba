@@ -3,12 +3,11 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Pencil, Trash2, Star } from "lucide-react"
+import { Pencil, Trash2 } from 'lucide-react'
 import { EditProductDialog } from "./edit-product-dialog"
 import { DeleteProductDialog } from "./delete-product-dialog"
 import { useState } from "react"
 import type { Product } from "@/types"
-import Image from "next/image"
 
 interface ProductsTableProps {
   products: Product[]
@@ -31,9 +30,8 @@ export function ProductsTable({ products }: ProductsTableProps) {
         <Table>
           <TableHeader>
             <TableRow className="bg-zinc-900/50 border-zinc-800 hover:bg-zinc-900/70">
-              <TableHead className="text-white w-16">Imagen</TableHead>
               <TableHead className="text-white">Nombre</TableHead>
-              <TableHead className="text-white">Categoria</TableHead>
+              <TableHead className="text-white">Categoría</TableHead>
               <TableHead className="text-white">Precio</TableHead>
               <TableHead className="text-white">Stock</TableHead>
               <TableHead className="text-white">Estado</TableHead>
@@ -44,22 +42,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
             {products.length > 0 ? (
               products.map((product) => (
                 <TableRow key={product.id} className="border-zinc-800 hover:bg-zinc-900/30">
-                  <TableCell>
-                    <div className="relative w-12 h-12 rounded-md overflow-hidden bg-zinc-800">
-                      <Image
-                        src={product.image_url || "/placeholder.svg"}
-                        alt={product.name}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  </TableCell>
-                  <TableCell className="font-medium text-white">
-                    <div className="flex items-center gap-2">
-                      {product.name}
-                      {product.featured && <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />}
-                    </div>
-                  </TableCell>
+                  <TableCell className="font-medium text-white">{product.name}</TableCell>
                   <TableCell className="text-white">{product.category || "N/A"}</TableCell>
                   <TableCell className="text-white">{formatPrice(product.price)}</TableCell>
                   <TableCell className="text-white">{product.stock}</TableCell>
@@ -96,7 +79,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={7} className="text-center text-white py-8">
+                <TableCell colSpan={6} className="text-center text-white py-8">
                   No se encontraron productos
                 </TableCell>
               </TableRow>

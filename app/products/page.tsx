@@ -3,7 +3,6 @@ import { ProductCard } from "@/components/product-card"
 import { ProductFilters } from "@/components/product-filters"
 import { Header } from "@/components/header"
 import type { Product } from "@/types"
-import { mockProducts } from "@/lib/mock-products"
 
 export default async function ProductsPage({
   searchParams,
@@ -13,6 +12,7 @@ export default async function ProductsPage({
   const params = await searchParams
   const supabase = await createClient()
 
+  // Build query
   let query = supabase.from("products").select("*")
 
   // Apply search filter
@@ -36,39 +36,40 @@ export default async function ProductsPage({
     query = query.order("created_at", { ascending: false })
   }
 
-  const { data: supabaseProducts, error } = await query
-
-  const displayProducts = supabaseProducts && supabaseProducts.length > 0 ? supabaseProducts : mockProducts
+  const { data: products, error } = await query
 
   if (error) {
     console.error("Error fetching products:", error)
+    return (
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <div className="container mx-auto px-4 py-8 text-center">
+          <p className="text-forest-400">Error loading products</p>
+        </div>
+      </div>
+    )
   }
 
   return (
     <>
       <Header />
       <div className="min-h-screen bg-zinc-950 transition-colors duration-300 pt-24">
-        <div className="container mx-auto px-4 sm:px-6 max-w-7xl py-16 md:py-24">
-          <div className="mb-12 md:mb-16 text-center">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-light tracking-tight text-white mb-3 md:mb-4">
-              Nuestra Coleccion
-            </h1>
-            <p className="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto">
-              Descubre nuestra seleccion de moda urbana
-            </p>
+        <div className="container mx-auto px-4 py-8">
+          <div className="mb-8 text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-2 text-forest-300">Nuestra Colección</h1>
+            <p className="text-forest-400/80 text-lg">Descubre nuestra selección de moda urbana</p>
           </div>
 
           <ProductFilters />
 
-          {displayProducts && displayProducts.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-              {displayProducts.map((product: Product) => (
+          {products && products.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {products.map((product: Product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
           ) : (
             <div className="text-center py-12">
-              <p className="text-forest-400/80 text-lg">No se encontraron productos que coincidan con tu busqueda.</p>
+              <p className="text-forest-400/80 text-lg">No se encontraron productos que coincidan con tu búsqueda.</p>
             </div>
           )}
         </div>

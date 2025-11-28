@@ -1,17 +1,18 @@
 "use client"
 
 import type React from "react"
+
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { X, ImagePlus } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import type { Product } from "@/types"
 import toast from "react-hot-toast"
+import { Plus, X } from "lucide-react"
 
 interface EditProductDialogProps {
   product: Product
@@ -20,29 +21,28 @@ interface EditProductDialogProps {
 
 export function EditProductDialog({ product, onClose }: EditProductDialogProps) {
   const [isLoading, setIsLoading] = useState(false)
-  const [images, setImages] = useState<string[]>(
-    product.images && product.images.length > 0 ? product.images : [product.image_url || ""],
-  )
-  const [featured, setFeatured] = useState(product.featured || false)
+  const [imageUrls, setImageUrls] = useState<string[]>([])
+  const [currentImageUrl, setCurrentImageUrl] = useState("")
   const router = useRouter()
   const supabase = createClient()
 
-  const addImageField = () => {
-    if (images.length < 5) {
-      setImages([...images, ""])
+  useEffect(() => {
+    if (product.images && product.images.length > 0) {
+      setImageUrls(product.images)
+    } else if (product.image_url) {
+      setImageUrls([product.image_url])
+    }
+  }, [product])
+
+  const addImageUrl = () => {
+    if (currentImageUrl.trim()) {
+      setImageUrls([...imageUrls, currentImageUrl.trim()])
+      setCurrentImageUrl("")
     }
   }
 
-  const removeImageField = (index: number) => {
-    if (images.length > 1) {
-      setImages(images.filter((_, i) => i !== index))
-    }
-  }
-
-  const updateImage = (index: number, value: string) => {
-    const newImages = [...images]
-    newImages[index] = value
-    setImages(newImages)
+  const removeImageUrl = (index: number) => {
+    setImageUrls(imageUrls.filter((_, i) => i !== index))
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -55,17 +55,21 @@ export function EditProductDialog({ product, onClose }: EditProductDialogProps) 
       const stock = Number.parseInt(formData.get("stock") as string)
 
       if (isNaN(priceInDollars) || priceInDollars <= 0) {
-        toast.error("El precio debe ser un numero mayor a 0")
+        toast.error("El precio debe ser un número mayor a 0")
         return
       }
 
       if (isNaN(stock) || stock < 0) {
-        toast.error("El stock debe ser un numero mayor o igual a 0")
+        toast.error("El stock debe ser un número mayor o igual a 0")
+        return
+      }
+
+      if (imageUrls.length === 0) {
+        toast.error("Debe tener al menos una imagen")
         return
       }
 
       const priceInCents = Math.round(priceInDollars * 100)
-      const validImages = images.filter((img) => img.trim() !== "")
 
       const { error } = await supabase
         .from("products")
@@ -75,23 +79,22 @@ export function EditProductDialog({ product, onClose }: EditProductDialogProps) 
           price: priceInCents,
           category: formData.get("category") as string,
           stock: stock,
-          image_url: validImages[0] || "",
-          images: validImages,
-          featured: featured,
+          image_url: imageUrls[0],
+          images: imageUrls,
           updated_at: new Date().toISOString(),
         })
         .eq("id", product.id)
 
       if (error) {
-        console.error("Error updating product:", error)
+        console.error("[v0] Error updating product:", error)
         throw new Error("Error al actualizar el producto")
       }
 
-      toast.success("Producto actualizado exitosamente!")
+      toast.success("¡Producto actualizado exitosamente!")
       onClose()
       router.refresh()
     } catch (error) {
-      console.error("Error in handleSubmit:", error)
+      console.error("[v0] Error in handleSubmit:", error)
       if (error instanceof Error) {
         toast.error(error.message)
       } else {
@@ -104,14 +107,14 @@ export function EditProductDialog({ product, onClose }: EditProductDialogProps) 
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[550px] bg-zinc-900 border-zinc-800 max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-white">Editar Producto</DialogTitle>
-          <DialogDescription className="text-zinc-400">Actualiza la informacion del producto</DialogDescription>
+          <DialogTitle className="text-emerald-900">Editar Producto</DialogTitle>
+          <DialogDescription className="text-emerald-700">Actualiza la información del producto</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-white">
+            <Label htmlFor="name" className="text-emerald-900">
               Nombre del Producto
             </Label>
             <Input
@@ -119,25 +122,25 @@ export function EditProductDialog({ product, onClose }: EditProductDialogProps) 
               name="name"
               required
               defaultValue={product.name}
-              className="bg-zinc-800 border-zinc-700 text-white focus:border-forest-500"
+              className="border-emerald-200 focus:border-emerald-500"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description" className="text-white">
-              Descripcion
+            <Label htmlFor="description" className="text-emerald-900">
+              Descripción
             </Label>
             <Textarea
               id="description"
               name="description"
               defaultValue={product.description || ""}
-              className="bg-zinc-800 border-zinc-700 text-white focus:border-forest-500"
+              className="border-emerald-200 focus:border-emerald-500"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="price" className="text-white">
+              <Label htmlFor="price" className="text-emerald-900">
                 Precio ($)
               </Label>
               <Input
@@ -148,12 +151,12 @@ export function EditProductDialog({ product, onClose }: EditProductDialogProps) 
                 min="0.01"
                 required
                 defaultValue={(product.price / 100).toFixed(2)}
-                className="bg-zinc-800 border-zinc-700 text-white focus:border-forest-500"
+                className="border-emerald-200 focus:border-emerald-500"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="stock" className="text-white">
+              <Label htmlFor="stock" className="text-emerald-900">
                 Stock
               </Label>
               <Input
@@ -163,75 +166,68 @@ export function EditProductDialog({ product, onClose }: EditProductDialogProps) 
                 min="0"
                 required
                 defaultValue={product.stock}
-                className="bg-zinc-800 border-zinc-700 text-white focus:border-forest-500"
+                className="border-emerald-200 focus:border-emerald-500"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="category" className="text-white">
-              Categoria
+            <Label htmlFor="category" className="text-emerald-900">
+              Categoría
             </Label>
             <Input
               id="category"
               name="category"
               defaultValue={product.category || ""}
-              className="bg-zinc-800 border-zinc-700 text-white focus:border-forest-500"
+              className="border-emerald-200 focus:border-emerald-500"
             />
           </div>
 
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <Label className="text-white">Imagenes del Producto</Label>
+          <div className="space-y-2">
+            <Label className="text-emerald-900">Imágenes del Producto</Label>
+            <div className="flex gap-2">
+              <Input
+                type="url"
+                value={currentImageUrl}
+                onChange={(e) => setCurrentImageUrl(e.target.value)}
+                placeholder="https://ejemplo.com/imagen.jpg"
+                className="border-emerald-200 focus:border-emerald-500"
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault()
+                    addImageUrl()
+                  }
+                }}
+              />
               <Button
                 type="button"
-                variant="ghost"
-                size="sm"
-                onClick={addImageField}
-                disabled={images.length >= 5}
-                className="text-forest-400 hover:text-forest-300 hover:bg-forest-900/20"
+                onClick={addImageUrl}
+                variant="outline"
+                className="border-emerald-200 bg-transparent"
               >
-                <ImagePlus className="h-4 w-4 mr-1" />
-                Agregar
+                <Plus className="h-4 w-4" />
               </Button>
             </div>
-            <div className="space-y-2">
-              {images.map((image, index) => (
-                <div key={index} className="flex gap-2">
-                  <Input
-                    value={image}
-                    onChange={(e) => updateImage(index, e.target.value)}
-                    placeholder={index === 0 ? "URL imagen principal" : `URL imagen ${index + 1}`}
-                    className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-forest-500"
-                  />
-                  {images.length > 1 && (
+
+            {imageUrls.length > 0 && (
+              <div className="space-y-2 mt-3">
+                {imageUrls.map((url, index) => (
+                  <div key={index} className="flex items-center gap-2 p-2 bg-emerald-50 rounded-md">
+                    <span className="text-sm text-emerald-900 flex-1 truncate">{url}</span>
                     <Button
                       type="button"
                       variant="ghost"
                       size="icon"
-                      onClick={() => removeImageField(index)}
-                      className="text-red-400 hover:text-red-300 hover:bg-red-900/20 shrink-0"
+                      onClick={() => removeImageUrl(index)}
+                      className="h-6 w-6 text-red-600 hover:text-red-700 hover:bg-red-50"
                     >
                       <X className="h-4 w-4" />
                     </Button>
-                  )}
-                </div>
-              ))}
-              <p className="text-xs text-zinc-500">Puedes agregar hasta 5 imagenes. La primera sera la principal.</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3 pt-2">
-            <input
-              type="checkbox"
-              id="featured"
-              checked={featured}
-              onChange={(e) => setFeatured(e.target.checked)}
-              className="w-4 h-4 rounded border-zinc-700 bg-zinc-800 text-forest-500 focus:ring-forest-500"
-            />
-            <Label htmlFor="featured" className="text-white cursor-pointer">
-              Producto destacado (aparece en el inicio)
-            </Label>
+                  </div>
+                ))}
+                <p className="text-xs text-emerald-600">{imageUrls.length} imagen(es) agregada(s)</p>
+              </div>
+            )}
           </div>
 
           <div className="flex justify-end gap-3 pt-4">
@@ -239,11 +235,11 @@ export function EditProductDialog({ product, onClose }: EditProductDialogProps) 
               type="button"
               variant="outline"
               onClick={onClose}
-              className="border-zinc-700 text-white hover:bg-zinc-800 bg-transparent"
+              className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 bg-transparent"
             >
               Cancelar
             </Button>
-            <Button type="submit" disabled={isLoading} className="bg-forest-600 hover:bg-forest-700 text-white">
+            <Button type="submit" disabled={isLoading} className="bg-emerald-600 hover:bg-emerald-700">
               {isLoading ? "Guardando..." : "Guardar Cambios"}
             </Button>
           </div>

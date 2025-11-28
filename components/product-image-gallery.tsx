@@ -6,88 +6,97 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface ProductImageGalleryProps {
-  images: (string | null)[]
+  images: string[]
   productName: string
 }
 
 export function ProductImageGallery({ images, productName }: ProductImageGalleryProps) {
-  const [selectedImage, setSelectedImage] = useState(0)
+  const [currentIndex, setCurrentIndex] = useState(0)
 
-  // Filter out null images
-  const validImages = images.filter((img): img is string => img !== null && img !== undefined)
+  console.log("[v0] Gallery received images:", images)
+  console.log("[v0] Gallery images length:", images.length)
 
-  const handlePrevious = () => {
-    setSelectedImage((prev) => (prev === 0 ? validImages.length - 1 : prev - 1))
-  }
-
-  const handleNext = () => {
-    setSelectedImage((prev) => (prev === validImages.length - 1 ? 0 : prev + 1))
-  }
-
-  if (validImages.length === 0) {
+  if (!images || images.length === 0) {
     return (
-      <div className="relative aspect-square rounded-2xl overflow-hidden bg-zinc-900">
-        <Image src="/generic-product-display.png" alt={productName} fill className="object-cover" priority />
+      <div className="relative aspect-square rounded-xl overflow-hidden bg-muted">
+        <Image src="/ropa-minimalista.jpg" alt={productName} fill className="object-cover" priority />
       </div>
     )
   }
 
+  const goToPrevious = () => {
+    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
+  }
+
+  const goToNext = () => {
+    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))
+  }
+
   return (
     <div className="space-y-4">
-      {/* Main Image */}
-      <div className="relative aspect-[3/4] max-w-[500px] mx-auto rounded-2xl overflow-hidden bg-zinc-900 group">
+      {/* Imagen principal */}
+      <div className="relative aspect-square rounded-xl overflow-hidden bg-muted group">
         <Image
-          src={validImages[selectedImage] || "/placeholder.svg"}
-          alt={`${productName} - imagen ${selectedImage + 1}`}
+          src={images[currentIndex] || "/placeholder.svg"}
+          alt={`${productName} - Vista ${currentIndex + 1}`}
           fill
-          className="object-cover"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
           priority
         />
 
-        {/* Navigation Arrows - only show if more than 1 image */}
-        {validImages.length > 1 && (
+        {/* Controles de navegación - solo si hay más de una imagen */}
+        {images.length > 1 && (
           <>
             <Button
               variant="ghost"
               size="icon"
-              className="absolute left-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-zinc-900/80 hover:bg-zinc-800 text-white"
-              onClick={handlePrevious}
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white/90 text-black rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={goToPrevious}
             >
               <ChevronLeft className="h-6 w-6" />
             </Button>
             <Button
               variant="ghost"
               size="icon"
-              className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-zinc-900/80 hover:bg-zinc-800 text-white"
-              onClick={handleNext}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white/90 text-black rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={goToNext}
             >
               <ChevronRight className="h-6 w-6" />
             </Button>
-          </>
-        )}
 
-        {/* Image Counter */}
-        {validImages.length > 1 && (
-          <div className="absolute bottom-4 right-4 bg-zinc-900/80 text-white px-3 py-1 rounded-full text-sm">
-            {selectedImage + 1} / {validImages.length}
-          </div>
+            {/* Indicador de posición */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+              {images.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentIndex(index)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    index === currentIndex ? "bg-white w-6" : "bg-white/50"
+                  }`}
+                  aria-label={`Ver imagen ${index + 1}`}
+                />
+              ))}
+            </div>
+          </>
         )}
       </div>
 
-      {/* Thumbnail Gallery - only show if more than 1 image */}
-      {validImages.length > 1 && (
-        <div className="grid grid-cols-4 sm:grid-cols-5 gap-3 max-w-[500px] mx-auto">
-          {validImages.map((image, index) => (
+      {/* Miniaturas - solo si hay más de una imagen */}
+      {images.length > 1 && (
+        <div className="grid grid-cols-4 gap-2">
+          {images.map((image, index) => (
             <button
               key={index}
-              onClick={() => setSelectedImage(index)}
-              className={`relative aspect-square rounded-lg overflow-hidden bg-zinc-900 border-2 transition-all ${
-                selectedImage === index ? "border-forest-400 scale-95" : "border-zinc-800 hover:border-zinc-700"
+              onClick={() => setCurrentIndex(index)}
+              className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                index === currentIndex
+                  ? "border-primary scale-105"
+                  : "border-transparent hover:border-muted-foreground/30"
               }`}
             >
               <Image
                 src={image || "/placeholder.svg"}
-                alt={`${productName} - miniatura ${index + 1}`}
+                alt={`${productName} - Miniatura ${index + 1}`}
                 fill
                 className="object-cover"
               />

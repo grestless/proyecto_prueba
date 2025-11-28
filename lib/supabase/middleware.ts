@@ -6,15 +6,14 @@ export async function updateSession(request: NextRequest) {
     request,
   })
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-  if (!supabaseUrl || !supabaseKey) {
-    // If env vars are missing, just pass through - the client components will fail but middleware won't crash the whole app
+  if (!supabaseUrl || !supabaseAnonKey) {
     return supabaseResponse
   }
 
-  const supabase = createServerClient(supabaseUrl, supabaseKey, {
+  const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
       getAll() {
         return request.cookies.getAll()
@@ -29,35 +28,39 @@ export async function updateSession(request: NextRequest) {
     },
   })
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
-  if (request.nextUrl.pathname.startsWith("/admin")) {
-    if (!user) {
+    if (request.nextUrl.pathname.startsWith("/admin")) {
+      if (!user) {
+        const url = request.nextUrl.clone()
+        url.pathname = "/auth/login"
+        url.searchParams.set("redirect", request.nextUrl.pathname)
+        return NextResponse.redirect(url)
+      }
+
+      // Check if user has admin role
+      const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single()
+
+      if (!profile || profile.role !== "admin") {
+        const url = request.nextUrl.clone()
+        url.pathname = "/"
+        url.searchParams.set("error", "access_denied")
+        return NextResponse.redirect(url)
+      }
+    }
+
+    // Protect profile routes
+    if (request.nextUrl.pathname.startsWith("/profile") && !user) {
       const url = request.nextUrl.clone()
       url.pathname = "/auth/login"
       url.searchParams.set("redirect", request.nextUrl.pathname)
       return NextResponse.redirect(url)
     }
-
-    // Check if user has admin role
-    const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single()
-
-    if (!profile || profile.role !== "admin") {
-      const url = request.nextUrl.clone()
-      url.pathname = "/"
-      url.searchParams.set("error", "access_denied")
-      return NextResponse.redirect(url)
-    }
-  }
-
-  // Protect profile routes
-  if (request.nextUrl.pathname.startsWith("/profile") && !user) {
-    const url = request.nextUrl.clone()
-    url.pathname = "/auth/login"
-    url.searchParams.set("redirect", request.nextUrl.pathname)
-    return NextResponse.redirect(url)
+  } catch (error) {
+    console.error("[v0] Error in Supabase middleware:", error)
   }
 
   return supabaseResponse

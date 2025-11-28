@@ -22,7 +22,7 @@ export function SizeGuideModal() {
       </DialogTrigger>
       <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl">Guía de Talles </DialogTitle>
+          <DialogTitle className="text-2xl">Guía de Talles Argentina</DialogTitle>
           <DialogDescription>
             Encontrá tu talle perfecto con nuestras tablas de conversión y medidas detalladas
           </DialogDescription>
