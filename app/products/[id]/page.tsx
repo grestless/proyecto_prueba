@@ -7,7 +7,8 @@ import Link from "next/link"
 import { ArrowLeft, Package, Ruler, Palette } from "lucide-react"
 import { ProductImageGallery } from "@/components/product-image-gallery"
 import { SizeGuideModal } from "@/components/size-guide-modal"
-import { mockProducts } from "@/lib/mock-products"
+import { getRelatedProducts } from "@/app/actions/products"
+import { ProductCard } from "@/components/product-card"
 
 function isValidUUID(id: string): boolean {
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
@@ -30,8 +31,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   }
 
   if (!product) {
-    product = mockProducts.find((p) => p.id === id)
-    console.log("[v0] Product from mockProducts:", product)
+    notFound()
   }
 
   if (!product) {
@@ -50,6 +50,9 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
   console.log("[v0] Product images array:", productImages)
   console.log("[v0] Product images length:", productImages.length)
+
+  // Get related products
+  const relatedProducts = product ? await getRelatedProducts(product.id, product.category || "") : []
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-muted/30 to-muted/50">
@@ -132,6 +135,17 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             <AddToCartButton product={product} />
           </div>
         </div>
+
+        {relatedProducts.length > 0 && (
+          <div className="mt-16">
+            <h2 className="text-2xl font-bold mb-6 text-foreground">Productos Relacionados</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {relatedProducts.map((relatedProduct) => (
+                <ProductCard key={relatedProduct.id} product={relatedProduct} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

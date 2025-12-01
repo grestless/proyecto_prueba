@@ -6,7 +6,7 @@ import { User, Package, Mail, Calendar, Phone, MapPin } from "lucide-react"
 import { OrderHistoryItem } from "@/components/order-history-item"
 import { EditProfileDialog } from "@/components/profile/edit-profile-dialog"
 import { AvatarUpload } from "@/components/profile/avatar-upload"
-import { Header } from "@/components/header"
+
 
 export default async function ProfilePage(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
@@ -51,7 +51,7 @@ export default async function ProfilePage(props: {
 
   return (
     <>
-      <Header />
+
       <div className="min-h-screen bg-zinc-950 transition-colors duration-300 pt-24 sm:pt-28 md:pt-32">
         <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 sm:mb-8 text-center">Mi Cuenta</h1>

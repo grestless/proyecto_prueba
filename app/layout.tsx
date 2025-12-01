@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import "./scroll-animations.css"
+import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { ErrorBoundary } from "@/components/error-boundary"
 import { ToastProvider } from "@/components/toast-provider"
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           storageKey="urban-style-theme"
         >
           <ErrorBoundary>
+            <Header />
             <main className="min-h-screen">{children}</main>
             <Footer />
             <ToastProvider />

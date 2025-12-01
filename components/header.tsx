@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { createClient } from "@/lib/supabase/client"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import type { User as SupabaseUser } from "@supabase/supabase-js"
 import type { Profile } from "@/types"
@@ -25,7 +25,12 @@ export function Header() {
   const [isLoading, setIsLoading] = useState(true)
   const [cartCount, setCartCount] = useState(0)
   const router = useRouter()
+  const pathname = usePathname()
   const supabase = createClient()
+
+  if (pathname?.startsWith("/auth")) {
+    return null
+  }
 
   useEffect(() => {
     const getUser = async () => {

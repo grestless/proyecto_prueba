@@ -82,7 +82,6 @@ export default function HomePage() {
 
   return (
     <>
-      <Header />
       <div className="min-h-screen bg-zinc-950 transition-colors duration-300">
         <section className="relative min-h-screen pt-24 sm:pt-28 md:pt-32 pb-12 md:pb-16 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black" />

@@ -27,7 +27,7 @@ export function CheckoutButton({ cartItems, total }: CheckoutButtonProps) {
       // Validate all products have required data
       const invalidItems = cartItems.filter((item) => !item.product || !item.product.name || !item.product.price)
       if (invalidItems.length > 0) {
-        console.error("[v0] Invalid cart items:", invalidItems)
+        console.error("[v0] Algunos productos en tu carrito tienen datos inválidos:", invalidItems)
         toast.error("Algunos productos en tu carrito tienen datos inválidos")
         return
       }
@@ -51,7 +51,7 @@ export function CheckoutButton({ cartItems, total }: CheckoutButtonProps) {
       toast.success("Redirigiendo a la página de pago...", { id: "checkout" })
       window.location.href = checkoutUrl
     } catch (error) {
-      console.error("[v0] Error in handleCheckout:", error)
+      console.error("[v0] Error al procesar el pago:", error)
       toast.dismiss("checkout")
 
       if (error instanceof Error) {
@@ -68,7 +68,7 @@ export function CheckoutButton({ cartItems, total }: CheckoutButtonProps) {
     <Button
       onClick={handleCheckout}
       disabled={isLoading || cartItems.length === 0}
-      className="w-full bg-olive-600 hover:bg-olive-700 dark:bg-olive-700 dark:hover:bg-olive-800 text-white text-lg py-6"
+      className="w-full text-white text-lg py-6 cursor-pointer transition-colors duration-200 bg-transparent"
     >
       <CreditCard className="mr-2 h-5 w-5" />
       {isLoading ? "Procesando..." : "Proceder al Pago"}

@@ -109,7 +109,7 @@ export async function createCheckoutSession(lineItems: LineItem[], total: number
       .eq("id", order.id)
 
     if (updateError) {
-      console.error("[v0] Error updating order with session ID:", updateError)
+      console.error("[v0] Error al actualizar la orden con el ID de la sesión:", updateError)
       // Continue anyway as the order is created
     }
 

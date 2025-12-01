@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { ProductCard } from "@/components/product-card"
 import { ProductFilters } from "@/components/product-filters"
-import { Header } from "@/components/header"
+
 import type { Product } from "@/types"
 
 export default async function ProductsPage({
@@ -43,7 +43,7 @@ export default async function ProductsPage({
     return (
       <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
         <div className="container mx-auto px-4 py-8 text-center">
-          <p className="text-forest-400">Error loading products</p>
+          <p className="text-forest-400">Error al cargar los productos</p>
         </div>
       </div>
     )
@@ -51,7 +51,7 @@ export default async function ProductsPage({
 
   return (
     <>
-      <Header />
+
       <div className="min-h-screen bg-zinc-950 transition-colors duration-300 pt-24">
         <div className="container mx-auto px-4 py-8">
           <div className="mb-8 text-center">
