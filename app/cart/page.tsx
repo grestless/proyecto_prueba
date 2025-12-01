@@ -52,12 +52,12 @@ export default async function CartPage() {
 
       <div className="min-h-screen bg-zinc-950 transition-colors duration-300 pt-24 sm:pt-28 md:pt-32">
         <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 sm:mb-8 text-center">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-8 text-center">
             Carrito de Compras
           </h1>
 
           {cartItems && cartItems.length > 0 ? (
-            <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
+            <div className="grid lg:grid-cols-3 gap-4 sm:gap-8">
               <div className="lg:col-span-2 space-y-3 sm:space-y-4">
                 {cartItems.map((item: any) => (
                   <CartItemComponent key={item.id} item={item} />

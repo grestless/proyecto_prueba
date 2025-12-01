@@ -54,7 +54,7 @@ export function OrdersTable({ orders }: OrdersTableProps) {
 
   return (
     <div className="rounded-md border border-zinc-800 overflow-x-auto">
-      <Table>
+      <Table className="mobile-card-table">
         <TableHeader>
           <TableRow className="bg-zinc-900/50 border-zinc-800 hover:bg-zinc-900/70">
             <TableHead className="text-white">ID Pedido</TableHead>
@@ -69,19 +69,19 @@ export function OrdersTable({ orders }: OrdersTableProps) {
           {orders.length > 0 ? (
             orders.map((order) => (
               <TableRow key={order.id} className="border-zinc-800 hover:bg-zinc-900/30">
-                <TableCell className="font-mono text-sm text-white">{order.id.slice(0, 8)}</TableCell>
-                <TableCell className="text-white">
+                <TableCell className="font-mono text-sm text-white" data-label="ID Pedido">{order.id.slice(0, 8)}</TableCell>
+                <TableCell className="text-white" data-label="Cliente">
                   <div>
                     <p className="font-medium">{order.profiles?.name || "Desconocido"}</p>
                     <p className="text-sm text-white/60">{order.profiles?.email}</p>
                   </div>
                 </TableCell>
-                <TableCell className="text-white">{order.order_items.length} items</TableCell>
-                <TableCell className="font-semibold text-white">{formatPrice(order.total)}</TableCell>
-                <TableCell>
+                <TableCell className="text-white" data-label="Items">{order.order_items.length} items</TableCell>
+                <TableCell className="font-semibold text-white" data-label="Total">{formatPrice(order.total)}</TableCell>
+                <TableCell data-label="Estado">
                   <Badge className={getStatusColor(order.status)}>{getStatusText(order.status)}</Badge>
                 </TableCell>
-                <TableCell className="text-white">{formatDate(order.created_at)}</TableCell>
+                <TableCell className="text-white" data-label="Fecha">{formatDate(order.created_at)}</TableCell>
               </TableRow>
             ))
           ) : (

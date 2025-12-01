@@ -87,9 +87,9 @@ export function CartItemComponent({ item }: CartItemComponentProps) {
 
   return (
     <Card className="border-border">
-      <CardContent className="p-4">
-        <div className="flex gap-4">
-          <div className="relative h-24 w-24 flex-shrink-0 rounded-lg overflow-hidden bg-muted">
+      <CardContent className="p-3 sm:p-4">
+        <div className="flex gap-3 sm:gap-4">
+          <div className="relative h-20 w-20 sm:h-24 sm:w-24 flex-shrink-0 rounded-lg overflow-hidden bg-muted">
             <Image
               src={item.product.image_url || "/placeholder.svg?height=100&width=100&query=ropa"}
               alt={item.product.name}
@@ -100,23 +100,23 @@ export function CartItemComponent({ item }: CartItemComponentProps) {
 
           <div className="flex-1 flex flex-col justify-between">
             <div>
-              <h3 className="font-semibold text-foreground">{item.product.name}</h3>
-              <p className="text-sm text-muted-foreground">{item.product.category}</p>
+              <h3 className="font-semibold text-foreground text-sm sm:text-base line-clamp-1">{item.product.name}</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground">{item.product.category}</p>
 
-              <div className="flex gap-2 mt-2">
+              <div className="flex gap-2 mt-1 sm:mt-2">
                 {item.selected_size && (
-                  <Badge variant="outline" className="text-xs">
-                    Talle: {item.selected_size}
+                  <Badge variant="outline" className="text-[10px] sm:text-xs px-1.5 py-0 h-5">
+                    {item.selected_size}
                   </Badge>
                 )}
                 {item.selected_color && (
-                  <Badge variant="outline" className="text-xs">
-                    Color: {item.selected_color}
+                  <Badge variant="outline" className="text-[10px] sm:text-xs px-1.5 py-0 h-5">
+                    {item.selected_color}
                   </Badge>
                 )}
               </div>
 
-              <p className="text-lg font-bold text-primary mt-1">{formatPrice(item.product.price)}</p>
+              <p className="text-base sm:text-lg font-bold text-primary mt-1">{formatPrice(item.product.price)}</p>
             </div>
 
             <div className="flex items-center justify-between mt-2">
@@ -126,30 +126,30 @@ export function CartItemComponent({ item }: CartItemComponentProps) {
                   size="icon"
                   onClick={() => updateQuantity(item.quantity - 1)}
                   disabled={isLoading || item.quantity <= 1}
-                  className="h-8 w-8 border-border text-foreground hover:bg-muted"
+                  className="h-7 w-7 sm:h-8 sm:w-8 border-border text-foreground hover:bg-muted"
                 >
                   <Minus className="h-3 w-3" />
                 </Button>
-                <span className="w-8 text-center font-semibold text-foreground">{item.quantity}</span>
+                <span className="w-6 sm:w-8 text-center text-sm sm:text-base font-semibold text-foreground">{item.quantity}</span>
                 <Button
                   variant="outline"
                   size="icon"
                   onClick={() => updateQuantity(item.quantity + 1)}
                   disabled={isLoading || item.quantity >= (item.product?.stock || 0)}
-                  className="h-8 w-8 border-border text-foreground hover:bg-muted"
+                  className="h-7 w-7 sm:h-8 sm:w-8 border-border text-foreground hover:bg-muted"
                 >
                   <Plus className="h-3 w-3" />
                 </Button>
               </div>
 
-              <div className="flex items-center gap-4">
-                <span className="font-bold text-foreground">{formatPrice(item.product.price * item.quantity)}</span>
+              <div className="flex items-center gap-3 sm:gap-4">
+                <span className="font-bold text-foreground text-sm sm:text-base">{formatPrice(item.product.price * item.quantity)}</span>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={removeItem}
                   disabled={isLoading}
-                  className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                  className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>

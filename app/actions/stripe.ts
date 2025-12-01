@@ -3,6 +3,7 @@
 import Stripe from "stripe"
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
+import { headers } from "next/headers"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
@@ -75,6 +76,10 @@ export async function createCheckoutSession(lineItems: LineItem[], total: number
       throw new Error("Error al procesar los artículos de la orden.")
     }
 
+    // Get origin from headers
+    const headersList = await headers()
+    const origin = headersList.get("origin") || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -90,8 +95,8 @@ export async function createCheckoutSession(lineItems: LineItem[], total: number
         quantity: item.quantity,
       })),
       mode: "payment",
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/checkout/success?session_id={CHECKOUT_SESSION_ID}&order_id=${order.id}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/cart`,
+      success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}&order_id=${order.id}`,
+      cancel_url: `${origin}/cart`,
       metadata: {
         order_id: order.id,
         user_id: user.id,

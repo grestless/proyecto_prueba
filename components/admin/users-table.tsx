@@ -21,7 +21,7 @@ export function UsersTable({ users }: UsersTableProps) {
 
   return (
     <div className="rounded-md border border-zinc-800 overflow-x-auto">
-      <Table>
+      <Table className="mobile-card-table">
         <TableHeader>
           <TableRow className="bg-zinc-900/50 border-zinc-800 hover:bg-zinc-900/70">
             <TableHead className="text-white">Usuario</TableHead>
@@ -42,7 +42,7 @@ export function UsersTable({ users }: UsersTableProps) {
           ) : (
             users.map((user) => (
               <TableRow key={user.id} className="border-zinc-800 hover:bg-zinc-900/30">
-                <TableCell>
+                <TableCell data-label="Usuario">
                   <div className="flex items-center gap-3">
                     <Avatar className="h-10 w-10 border border-zinc-700">
                       <AvatarImage src={user.avatar_url || undefined} alt={user.name || "User"} />
@@ -56,25 +56,25 @@ export function UsersTable({ users }: UsersTableProps) {
                     </div>
                   </div>
                 </TableCell>
-                <TableCell>
+                <TableCell data-label="Email">
                   <div className="flex items-center gap-2">
                     <Mail className="h-4 w-4 text-white/60" />
                     <span className="text-white">{user.email}</span>
                   </div>
                 </TableCell>
-                <TableCell>
+                <TableCell data-label="Teléfono">
                   <div className="flex items-center gap-2">
                     <Phone className="h-4 w-4 text-white/60" />
                     <span className="text-white">{user.phone || "No especificado"}</span>
                   </div>
                 </TableCell>
-                <TableCell>
+                <TableCell data-label="Dirección">
                   <div className="flex items-center gap-2">
                     <MapPin className="h-4 w-4 text-white/60" />
                     <span className="text-white text-sm">{user.address || "No especificada"}</span>
                   </div>
                 </TableCell>
-                <TableCell>
+                <TableCell data-label="Rol">
                   <Badge
                     className={
                       user.role === "admin"
@@ -85,7 +85,7 @@ export function UsersTable({ users }: UsersTableProps) {
                     {user.role === "admin" ? "Administrador" : "Usuario"}
                   </Badge>
                 </TableCell>
-                <TableCell>
+                <TableCell data-label="Registrado">
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-white/60" />
                     <span className="text-white text-sm">{formatDate(user.created_at)}</span>

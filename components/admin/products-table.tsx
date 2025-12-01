@@ -27,7 +27,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
   return (
     <>
       <div className="rounded-md border border-zinc-800 overflow-x-auto">
-        <Table>
+        <Table className="mobile-card-table">
           <TableHeader>
             <TableRow className="bg-zinc-900/50 border-zinc-800 hover:bg-zinc-900/70">
               <TableHead className="text-white">Nombre</TableHead>
@@ -42,11 +42,11 @@ export function ProductsTable({ products }: ProductsTableProps) {
             {products.length > 0 ? (
               products.map((product) => (
                 <TableRow key={product.id} className="border-zinc-800 hover:bg-zinc-900/30">
-                  <TableCell className="font-medium text-white">{product.name}</TableCell>
-                  <TableCell className="text-white">{product.category || "N/A"}</TableCell>
-                  <TableCell className="text-white">{formatPrice(product.price)}</TableCell>
-                  <TableCell className="text-white">{product.stock}</TableCell>
-                  <TableCell>
+                  <TableCell className="font-medium text-white" data-label="Nombre">{product.name}</TableCell>
+                  <TableCell className="text-white" data-label="Categoría">{product.category || "N/A"}</TableCell>
+                  <TableCell className="text-white" data-label="Precio">{formatPrice(product.price)}</TableCell>
+                  <TableCell className="text-white" data-label="Stock">{product.stock}</TableCell>
+                  <TableCell data-label="Estado">
                     {product.stock > 0 ? (
                       <Badge className="bg-forest-900/30 text-forest-300 border-forest-800">En Stock</Badge>
                     ) : (
@@ -55,7 +55,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
                       </Badge>
                     )}
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-right" data-label="Acciones">
                     <div className="flex justify-end gap-2">
                       <Button
                         variant="ghost"
