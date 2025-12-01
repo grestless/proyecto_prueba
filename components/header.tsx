@@ -28,9 +28,7 @@ export function Header() {
   const pathname = usePathname()
   const supabase = createClient()
 
-  if (pathname?.startsWith("/auth")) {
-    return null
-  }
+
 
   useEffect(() => {
     const getUser = async () => {
@@ -142,6 +140,10 @@ export function Header() {
         .slice(0, 2)
     }
     return user?.email?.[0].toUpperCase() || "U"
+  }
+
+  if (pathname?.startsWith("/auth")) {
+    return null
   }
 
   return (
