@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     description: "Descubre nuestra colección de ropa urbana minimalista con estilo único.",
     type: "website",
   },
-    generator: 'v0.app'
+  generator: 'v0.app'
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

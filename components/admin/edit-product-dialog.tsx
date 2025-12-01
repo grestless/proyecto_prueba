@@ -195,7 +195,7 @@ export function EditProductDialog({ product, onClose }: EditProductDialogProps) 
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="price" className="text-emerald-900">
                 Precio ($)
@@ -242,7 +242,7 @@ export function EditProductDialog({ product, onClose }: EditProductDialogProps) 
 
           <div className="space-y-2">
             <Label className="text-emerald-900">Talles Disponibles</Label>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="border-emerald-200 text-emerald-700">
@@ -302,7 +302,7 @@ export function EditProductDialog({ product, onClose }: EditProductDialogProps) 
 
           <div className="space-y-2">
             <Label className="text-emerald-900">Colores Disponibles</Label>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="border-emerald-200 text-emerald-700">
@@ -362,7 +362,7 @@ export function EditProductDialog({ product, onClose }: EditProductDialogProps) 
 
           <div className="space-y-2">
             <Label className="text-emerald-900">Imágenes del Producto</Label>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <Input
                 type="url"
                 value={currentImageUrl}

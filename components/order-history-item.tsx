@@ -61,7 +61,7 @@ export function OrderHistoryItem({ order }: OrderHistoryItemProps) {
   return (
     <Card className="border-emerald-100 bg-background">
       <CardContent className="p-4">
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2 sm:gap-0">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100">
               <Package className="h-5 w-5 text-emerald-600" />
@@ -71,7 +71,7 @@ export function OrderHistoryItem({ order }: OrderHistoryItemProps) {
               <p className="text-sm text-emerald-700">{formatDate(order.created_at)}</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 self-end sm:self-auto">
             <Badge className={getStatusColor(order.status)}>{getStatusLabel(order.status)}</Badge>
             <p className="font-bold text-popover-foreground">{formatPrice(order.total)}</p>
           </div>
@@ -84,16 +84,16 @@ export function OrderHistoryItem({ order }: OrderHistoryItemProps) {
               <ReorderButton orderItems={order.order_items} />
             </div>
             {order.order_items.map((item) => (
-              <div key={item.id} className="flex justify-between items-center py-2 px-3 rounded bg-popover">
+              <div key={item.id} className="flex flex-col sm:flex-row justify-between sm:items-center py-2 px-3 rounded bg-popover gap-2 sm:gap-0">
                 <div>
                   <p className="font-medium text-foreground">{item.product_name}</p>
-                  <div className="flex gap-3 text-sm text-emerald-700">
+                  <div className="flex flex-wrap gap-3 text-sm text-emerald-700">
                     <span>Cantidad: {item.quantity}</span>
                     {item.selected_size && <span>Talle: {item.selected_size}</span>}
                     {item.selected_color && <span>Color: {item.selected_color}</span>}
                   </div>
                 </div>
-                <p className="font-semibold text-foreground">{formatPrice(item.product_price * item.quantity)}</p>
+                <p className="font-semibold text-foreground self-end sm:self-auto">{formatPrice(item.product_price * item.quantity)}</p>
               </div>
             ))}
           </div>

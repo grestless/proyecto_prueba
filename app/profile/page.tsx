@@ -56,7 +56,11 @@ export default async function ProfilePage(props: {
         <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 sm:mb-8 text-center">Mi Cuenta</h1>
 
-          <Tabs defaultValue={searchParams.tab === "orders" ? "orders" : "profile"} className="space-y-4 sm:space-y-6">
+          <Tabs
+            defaultValue={searchParams.tab === "orders" ? "orders" : "profile"}
+            key={searchParams.tab === "orders" ? "orders" : "profile"}
+            className="space-y-4 sm:space-y-6"
+          >
             <TabsList className="bg-zinc-900/50 border border-zinc-800 backdrop-blur-sm w-full sm:w-auto grid grid-cols-2 sm:flex">
               <TabsTrigger
                 value="profile"

@@ -9,7 +9,7 @@ import Image from "next/image"
 import { Header } from "@/components/header"
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
-import { mockProducts } from "@/lib/mock-products"
+import { createClient } from "@/lib/supabase/client"
 import { Product } from "@/types"
 
 export default function HomePage() {
@@ -19,8 +19,20 @@ export default function HomePage() {
   useEffect(() => {
     async function loadProducts() {
       try {
-        const featured = mockProducts.slice(0, 6)
-        setFeaturedProducts(featured)
+        const supabase = createClient()
+        const { data: products, error } = await supabase
+          .from("products")
+          .select("*")
+          .limit(6)
+          .order("created_at", { ascending: false })
+
+        if (error) {
+          throw error
+        }
+
+        if (products) {
+          setFeaturedProducts(products)
+        }
       } catch (error) {
         console.error("[v0] Error loading products:", error)
       } finally {

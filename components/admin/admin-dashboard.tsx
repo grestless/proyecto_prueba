@@ -34,7 +34,7 @@ export function AdminDashboard({ products, orders, users }: AdminDashboardProps)
   const monthlyOrdersCount = filteredOrders.length
   const monthlyCompletedOrders = filteredOrders.filter((o) => o.status === "completed").length
   const monthlyRevenue = filteredOrders.reduce((sum, order) => sum + order.total, 0)
-  
+
   const totalUsers = users.length
 
   const formatPrice = (cents: number) => {
@@ -172,7 +172,7 @@ export function AdminDashboard({ products, orders, users }: AdminDashboardProps)
             <CardHeader>
               <CardTitle className="text-forest-300">Gestión de Productos</CardTitle>
             </CardHeader>
-            <CardContent className="text-forest-400/90 p-0 sm:p-6">
+            <CardContent className="text-forest-400/90 p-2 sm:p-6">
               <ProductsTable products={products} />
             </CardContent>
           </Card>
@@ -183,7 +183,7 @@ export function AdminDashboard({ products, orders, users }: AdminDashboardProps)
             <CardHeader>
               <CardTitle className="text-forest-300">Gestión de Pedidos</CardTitle>
             </CardHeader>
-            <CardContent className="text-forest-400/90 p-0 sm:p-6">
+            <CardContent className="text-forest-400/90 p-2 sm:p-6">
               <OrdersTable orders={orders} />
             </CardContent>
           </Card>
@@ -194,7 +194,7 @@ export function AdminDashboard({ products, orders, users }: AdminDashboardProps)
             <CardHeader>
               <CardTitle className="text-forest-300">Gestión de Usuarios</CardTitle>
             </CardHeader>
-            <CardContent className="text-forest-400/90 p-0 sm:p-6">
+            <CardContent className="text-forest-400/90 p-2 sm:p-6">
               <UsersTable users={users} />
             </CardContent>
           </Card>

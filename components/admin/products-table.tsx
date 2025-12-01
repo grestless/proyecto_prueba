@@ -26,7 +26,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
 
   return (
     <>
-      <div className="rounded-md border border-zinc-800 overflow-hidden">
+      <div className="rounded-md border border-zinc-800 overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow className="bg-zinc-900/50 border-zinc-800 hover:bg-zinc-900/70">
