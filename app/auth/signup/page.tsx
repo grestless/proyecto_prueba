@@ -93,7 +93,7 @@ export default function SignUpPage() {
       <Card className="w-full max-w-6xl overflow-hidden shadow-2xl border-forest-800/50 bg-zinc-900/50 backdrop-blur-sm">
         <div className="grid lg:grid-cols-2">
           {/* Panel lateral izquierdo - Info/Branding */}
-          <div className="bg-gradient-to-br from-forest-700 via-forest-800 to-forest-900 p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
+          <div className="bg-gradient-to-br from-forest-900 via-forest-950 to-zinc-800 p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
             {/* Elementos decorativos */}
             <div className="absolute inset-0 opacity-10">
               <div className="absolute top-20 right-20 w-72 h-72 bg-forest-400 rounded-full blur-3xl" />
@@ -102,7 +102,7 @@ export default function SignUpPage() {
 
             <div className="relative z-10">
               <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 rounded-xl bg-forest-600/30 backdrop-blur-sm flex items-center justify-center">
+                <div className="w-12 h-12 rounded-xl bg-zinc-900/30 backdrop-blur-sm flex items-center justify-center">
                   <Sparkles className="w-6 h-6 text-white" />
                 </div>
                 <span className="text-2xl font-bold text-white">Urban Style</span>

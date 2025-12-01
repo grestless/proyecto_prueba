@@ -14,17 +14,30 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Plus, X } from "lucide-react"
+import { Plus, X, ChevronDown } from "lucide-react"
 import { useState } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+const COMMON_SIZES = ["XS", "S", "M", "L", "XL", "XXL", "38", "40", "42", "44", "46"]
+const COMMON_COLORS = ["Negro", "Blanco", "Gris", "Azul", "Rojo", "Verde", "Beige", "Marrón", "Amarillo", "Rosa"]
 
 export function AddProductDialog() {
   const [open, setOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const [currentImageUrl, setCurrentImageUrl] = useState("")
+  const [sizes, setSizes] = useState<string[]>([])
+  const [currentSize, setCurrentSize] = useState("")
+  const [colors, setColors] = useState<string[]>([])
+  const [currentColor, setCurrentColor] = useState("")
   const router = useRouter()
   const supabase = createClient()
 
@@ -37,6 +50,46 @@ export function AddProductDialog() {
 
   const removeImageUrl = (index: number) => {
     setImageUrls(imageUrls.filter((_, i) => i !== index))
+  }
+
+  const addSize = () => {
+    if (currentSize.trim()) {
+      setSizes([...sizes, currentSize.trim()])
+      setCurrentSize("")
+    }
+  }
+
+
+
+  const addColor = () => {
+    if (currentColor.trim()) {
+      setColors([...colors, currentColor.trim()])
+      setCurrentColor("")
+    }
+  }
+
+  const removeSize = (index: number) => {
+    setSizes(sizes.filter((_, i) => i !== index))
+  }
+
+  const toggleSize = (size: string) => {
+    if (sizes.includes(size)) {
+      setSizes(sizes.filter((s) => s !== size))
+    } else {
+      setSizes([...sizes, size])
+    }
+  }
+
+  const removeColor = (index: number) => {
+    setColors(colors.filter((_, i) => i !== index))
+  }
+
+  const toggleColor = (color: string) => {
+    if (colors.includes(color)) {
+      setColors(colors.filter((c) => c !== color))
+    } else {
+      setColors([...colors, color])
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -73,6 +126,8 @@ export function AddProductDialog() {
         stock: stock,
         image_url: imageUrls[0],
         images: imageUrls,
+        sizes: sizes,
+        colors: colors,
       })
 
       if (error) {
@@ -84,6 +139,10 @@ export function AddProductDialog() {
       setOpen(false)
       setImageUrls([])
       setCurrentImageUrl("")
+      setSizes([])
+      setCurrentSize("")
+      setColors([])
+      setCurrentColor("")
       router.refresh()
     } catch (error) {
       console.error("[v0] Error in handleSubmit:", error)
@@ -182,6 +241,126 @@ export function AddProductDialog() {
           </div>
 
           <div className="space-y-2">
+            <Label className="text-emerald-900">Talles Disponibles</Label>
+            <div className="flex gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="border-emerald-200 text-emerald-700">
+                    Seleccionar Talles <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  {COMMON_SIZES.map((size) => (
+                    <DropdownMenuCheckboxItem
+                      key={size}
+                      checked={sizes.includes(size)}
+                      onCheckedChange={() => toggleSize(size)}
+                    >
+                      {size}
+                    </DropdownMenuCheckboxItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Input
+                value={currentSize}
+                onChange={(e) => setCurrentSize(e.target.value)}
+                placeholder="Otro talle..."
+                className="border-emerald-200 focus:border-emerald-500 w-[120px]"
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault()
+                    addSize()
+                  }
+                }}
+              />
+              <Button
+                type="button"
+                onClick={addSize}
+                variant="outline"
+                className="border-emerald-200 bg-transparent"
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+            {sizes.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {sizes.map((size, index) => (
+                  <div key={index} className="flex items-center gap-1 px-2 py-1 bg-emerald-50 rounded-md">
+                    <span className="text-sm text-emerald-900">{size}</span>
+                    <button
+                      type="button"
+                      onClick={() => removeSize(index)}
+                      className="text-emerald-500 hover:text-red-600"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-emerald-900">Colores Disponibles</Label>
+            <div className="flex gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="border-emerald-200 text-emerald-700">
+                    Seleccionar Colores <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  {COMMON_COLORS.map((color) => (
+                    <DropdownMenuCheckboxItem
+                      key={color}
+                      checked={colors.includes(color)}
+                      onCheckedChange={() => toggleColor(color)}
+                    >
+                      {color}
+                    </DropdownMenuCheckboxItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Input
+                value={currentColor}
+                onChange={(e) => setCurrentColor(e.target.value)}
+                placeholder="Otro color..."
+                className="border-emerald-200 focus:border-emerald-500 w-[120px]"
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault()
+                    addColor()
+                  }
+                }}
+              />
+              <Button
+                type="button"
+                onClick={addColor}
+                variant="outline"
+                className="border-emerald-200 bg-transparent"
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+            {colors.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {colors.map((color, index) => (
+                  <div key={index} className="flex items-center gap-1 px-2 py-1 bg-emerald-50 rounded-md">
+                    <span className="text-sm text-emerald-900">{color}</span>
+                    <button
+                      type="button"
+                      onClick={() => removeColor(index)}
+                      className="text-emerald-500 hover:text-red-600"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
             <Label className="text-emerald-900">Imágenes del Producto</Label>
             <div className="flex gap-2">
               <Input
@@ -236,6 +415,10 @@ export function AddProductDialog() {
                 setOpen(false)
                 setImageUrls([])
                 setCurrentImageUrl("")
+                setSizes([])
+                setCurrentSize("")
+                setColors([])
+                setCurrentColor("")
               }}
               className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 bg-transparent"
             >

@@ -11,21 +11,21 @@ export default function CheckoutCancelPage() {
           <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-red-900/50">
             <XCircle className="h-12 w-12 text-red-400" />
           </div>
-          <CardTitle className="text-3xl text-red-300">Checkout Cancelled</CardTitle>
+          <CardTitle className="text-3xl text-red-300">Checkout Cancelado</CardTitle>
         </CardHeader>
         <CardContent className="text-center space-y-6">
-          <p className="text-red-400">Your order was not completed. Your cart items are still saved.</p>
+          <p className="text-red-400">Su orden no se completó. Sus artículos del carrito aún están guardados.</p>
 
           <div className="flex flex-col gap-3">
             <Button asChild className="w-full bg-forest-600 hover:bg-forest-700">
-              <Link href="/cart">Return to Cart</Link>
+              <Link href="/cart">Volver al carrito</Link>
             </Button>
             <Button
               variant="outline"
               asChild
               className="w-full border-forest-700 text-forest-400 hover:bg-forest-900/50 bg-transparent"
             >
-              <Link href="/products">Continue Shopping</Link>
+              <Link href="/products">Continuar comprando</Link>
             </Button>
           </div>
         </CardContent>

@@ -42,7 +42,7 @@ export default async function CartPage() {
     }).format(cents / 100)
   }
 
-  const subtotal = cartItems?.reduce((sum, item) => sum + (item.product?.price || 0) * item.quantity, 0) || 0
+  const subtotal = cartItems?.reduce((sum: number, item: any) => sum + (item.product?.price || 0) * item.quantity, 0) || 0
 
   const tax = Math.round(subtotal * 0.1) // 10% tax
   const total = subtotal + tax
@@ -59,7 +59,7 @@ export default async function CartPage() {
           {cartItems && cartItems.length > 0 ? (
             <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
               <div className="lg:col-span-2 space-y-3 sm:space-y-4">
-                {cartItems.map((item) => (
+                {cartItems.map((item: any) => (
                   <CartItemComponent key={item.id} item={item} />
                 ))}
               </div>

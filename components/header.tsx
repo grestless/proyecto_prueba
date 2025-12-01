@@ -71,7 +71,7 @@ export function Header() {
             console.error("[v0] Error fetching cart:", cartError.message)
             setCartCount(0)
           } else {
-            const totalItems = cartItems?.reduce((sum, item) => sum + item.quantity, 0) || 0
+            const totalItems = cartItems?.reduce((sum: number, item: { quantity: number }) => sum + item.quantity, 0) || 0
             setCartCount(totalItems)
           }
         }
@@ -89,7 +89,7 @@ export function Header() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (_event: string, session: any) => {
       setUser(session?.user ?? null)
       if (!session?.user) {
         setProfile(null)
@@ -103,7 +103,7 @@ export function Header() {
             .from("cart_items")
             .select("quantity")
             .eq("user_id", session.user.id)
-          const totalItems = cartItems?.reduce((sum, item) => sum + item.quantity, 0) || 0
+          const totalItems = cartItems?.reduce((sum: number, item: { quantity: number }) => sum + item.quantity, 0) || 0
           setCartCount(totalItems)
         } catch (error) {
           console.error("[v0] Error updating user data:", error)
@@ -236,7 +236,7 @@ export function Header() {
                       asChild
                       className="text-white dark:text-zinc-100 focus:text-zinc-50 focus:bg-white/15 dark:focus:bg-white/10"
                     >
-                      <Link href="/profile#orders" className="cursor-pointer">
+                      <Link href="/profile?tab=orders" className="cursor-pointer">
                         <ShoppingBag className="mr-2 h-4 w-4" />
                         <span>Mis Pedidos</span>
                       </Link>

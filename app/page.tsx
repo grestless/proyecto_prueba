@@ -10,9 +10,10 @@ import { Header } from "@/components/header"
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
 import { mockProducts } from "@/lib/mock-products"
+import { Product } from "@/types"
 
 export default function HomePage() {
-  const [featuredProducts, setFeaturedProducts] = useState<any[]>([])
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

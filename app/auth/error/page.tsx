@@ -14,16 +14,16 @@ export default async function AuthErrorPage({ searchParams }: { searchParams: Pr
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-900/50">
               <AlertCircle className="h-10 w-10 text-red-400" />
             </div>
-            <CardTitle className="text-2xl text-red-300">Authentication Error</CardTitle>
+            <CardTitle className="text-2xl text-red-300">Error de autenticación</CardTitle>
           </CardHeader>
           <CardContent className="text-center">
             {params?.error ? (
               <p className="text-sm text-red-400 mb-6">Error: {params.error}</p>
             ) : (
-              <p className="text-sm text-red-400 mb-6">An unexpected error occurred during authentication.</p>
+              <p className="text-sm text-red-400 mb-6">Un error inesperado ocurrió durante la autenticación.</p>
             )}
             <Button asChild className="w-full bg-forest-600 hover:bg-forest-700">
-              <Link href="/auth/login">Back to Login</Link>
+              <Link href="/auth/login">Volver al login</Link>
             </Button>
           </CardContent>
         </Card>

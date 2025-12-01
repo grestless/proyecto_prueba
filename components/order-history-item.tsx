@@ -67,7 +67,7 @@ export function OrderHistoryItem({ order }: OrderHistoryItemProps) {
               <Package className="h-5 w-5 text-emerald-600" />
             </div>
             <div>
-              <p className="font-semibold text-emerald-900">Pedido #{order.id.slice(0, 8)}</p>
+              <p className="font-semibold text-white">Pedido #{order.id.slice(0, 8)}</p>
               <p className="text-sm text-emerald-700">{formatDate(order.created_at)}</p>
             </div>
           </div>
@@ -102,7 +102,7 @@ export function OrderHistoryItem({ order }: OrderHistoryItemProps) {
         <Button
           variant="ghost"
           onClick={() => setIsExpanded(!isExpanded)}
-          className="w-full mt-2 hover:text-emerald-900 hover:bg-forest-500"
+          className="w-full mt-2 hover:text-white hover:bg-emerald-500"
         >
           {isExpanded ? (
             <>

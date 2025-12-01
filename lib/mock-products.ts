@@ -1,4 +1,6 @@
-export const mockProducts = [
+import { Product } from "@/types"
+
+export const mockProducts: Product[] = [
   {
     id: "1",
     name: "Remera Oversized Negra",
@@ -11,6 +13,8 @@ export const mockProducts = [
     colors: ["Negro", "Blanco", "Gris"],
     featured: true,
     created_at: "2025-01-01",
+    updated_at: "2025-01-01",
+    images: [],
   },
   {
     id: "2",
@@ -24,6 +28,8 @@ export const mockProducts = [
     colors: ["Verde Oliva", "Negro", "Beige"],
     featured: true,
     created_at: "2025-01-02",
+    updated_at: "2025-01-02",
+    images: [],
   },
   {
     id: "3",
@@ -37,6 +43,8 @@ export const mockProducts = [
     colors: ["Blanco", "Negro", "Crema"],
     featured: true,
     created_at: "2025-01-03",
+    updated_at: "2025-01-03",
+    images: [],
   },
   {
     id: "4",
@@ -50,6 +58,8 @@ export const mockProducts = [
     colors: ["Negro", "Blanco", "Verde"],
     featured: false,
     created_at: "2025-01-04",
+    updated_at: "2025-01-04",
+    images: [],
   },
   {
     id: "5",
@@ -63,6 +73,8 @@ export const mockProducts = [
     colors: ["Gris", "Negro", "Crema"],
     featured: true,
     created_at: "2025-01-05",
+    updated_at: "2025-01-05",
+    images: [],
   },
   {
     id: "6",
@@ -76,6 +88,8 @@ export const mockProducts = [
     colors: ["Beige", "Azul Marino", "Negro"],
     featured: false,
     created_at: "2025-01-06",
+    updated_at: "2025-01-06",
+    images: [],
   },
   {
     id: "7",
@@ -89,6 +103,8 @@ export const mockProducts = [
     colors: ["Negro", "Verde Militar", "Azul Marino"],
     featured: true,
     created_at: "2025-01-07",
+    updated_at: "2025-01-07",
+    images: [],
   },
   {
     id: "8",
@@ -102,6 +118,8 @@ export const mockProducts = [
     colors: ["Negro", "Gris", "Camuflado"],
     featured: true,
     created_at: "2025-01-08",
+    updated_at: "2025-01-08",
+    images: [],
   },
   {
     id: "9",
@@ -115,5 +133,7 @@ export const mockProducts = [
     colors: ["Negro", "Marrón", "Tan"],
     featured: true,
     created_at: "2025-01-09",
+    updated_at: "2025-01-09",
+    images: [],
   },
 ]

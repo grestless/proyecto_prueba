@@ -61,7 +61,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-6xl overflow-hidden shadow-2xl border-forest-800/50 bg-zinc-900/50 backdrop-blur-sm">
         <div className="grid lg:grid-cols-2">
           {/* Panel lateral izquierdo - Info/Branding */}
-          <div className="bg-gradient-to-br from-forest-700 via-forest-800 to-forest-900 px-8 md:px-12 py-12 flex flex-col justify-between relative overflow-hidden min-h-[600px] lg:min-h-full">
+          <div className="bg-gradient-to-br from-zinc-850 via-forest-950 to-forest-800 px-8 md:px-12 py-12 flex flex-col justify-between relative overflow-hidden min-h-[600px] lg:min-h-full">
             {/* Elementos decorativos */}
             <div className="absolute inset-0 opacity-10">
               <div className="absolute top-20 left-20 w-72 h-72 bg-forest-400 rounded-full blur-3xl" />
@@ -155,8 +155,8 @@ export default function LoginPage() {
                     <Label htmlFor="password" className="text-foreground font-medium">
                       Contraseña
                     </Label>
-                    <Link 
-                      href="/auth/forgot-password" 
+                    <Link
+                      href="/auth/forgot-password"
                       className="text-sm text-primary hover:underline font-medium"
                     >
                       ¿Olvidaste tu contraseña?

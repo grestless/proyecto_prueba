@@ -8,7 +8,10 @@ import { EditProfileDialog } from "@/components/profile/edit-profile-dialog"
 import { AvatarUpload } from "@/components/profile/avatar-upload"
 import { Header } from "@/components/header"
 
-export default async function ProfilePage() {
+export default async function ProfilePage(props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const searchParams = await props.searchParams
   const supabase = await createClient()
 
   const {
@@ -53,7 +56,7 @@ export default async function ProfilePage() {
         <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 sm:mb-8 text-center">Mi Cuenta</h1>
 
-          <Tabs defaultValue="profile" className="space-y-4 sm:space-y-6">
+          <Tabs defaultValue={searchParams.tab === "orders" ? "orders" : "profile"} className="space-y-4 sm:space-y-6">
             <TabsList className="bg-zinc-900/50 border border-zinc-800 backdrop-blur-sm w-full sm:w-auto grid grid-cols-2 sm:flex">
               <TabsTrigger
                 value="profile"
@@ -136,7 +139,7 @@ export default async function ProfilePage() {
                       </div>
                       <div>
                         <p className="text-xl sm:text-2xl font-bold text-forest-400">
-                          {orders?.filter((o) => o.status === "completed").length || 0}
+                          {orders?.filter((o: any) => o.status === "completed").length || 0}
                         </p>
                         <p className="text-xs sm:text-sm text-zinc-500">Pedidos Completados</p>
                       </div>
@@ -154,7 +157,7 @@ export default async function ProfilePage() {
                 <CardContent>
                   {orders && orders.length > 0 ? (
                     <div className="space-y-4">
-                      {orders.map((order) => (
+                      {orders.map((order: any) => (
                         <OrderHistoryItem key={order.id} order={order} />
                       ))}
                     </div>

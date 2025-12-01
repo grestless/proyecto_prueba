@@ -64,7 +64,7 @@ export function ReorderButton({ orderItems }: ReorderButtonProps) {
       disabled={loading}
       size="sm"
       variant="outline"
-      className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 bg-transparent"
+      className="hover:bg-emerald-50 bg-transparent border-emerald-200 text-emerald-700 hover:border-emerald-600"
     >
       <ShoppingCart className="h-4 w-4 mr-2" />
       {loading ? "Agregando..." : "Repetir pedido"}
