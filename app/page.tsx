@@ -15,6 +15,16 @@ import { Product } from "@/types"
 export default function HomePage() {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640)
+    }
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [])
 
   useEffect(() => {
     async function loadProducts() {
@@ -549,15 +559,15 @@ export default function HomePage() {
 
             <div className="relative">
               <motion.div
-                className="flex gap-6"
+                className="flex gap-4 sm:gap-6"
                 animate={{
-                  x: [0, -320 * benefits.length],
+                  x: [0, -(isMobile ? 260 + 16 : 320 + 24) * benefits.length],
                 }}
                 transition={{
                   x: {
                     repeat: Number.POSITIVE_INFINITY,
                     repeatType: "loop",
-                    duration: 25,
+                    duration: 21,
                     ease: "linear",
                   },
                 }}
@@ -565,18 +575,18 @@ export default function HomePage() {
                 {[...benefits, ...benefits].map((benefit, index) => {
                   const Icon = benefit.icon
                   return (
-                    <div key={`benefit-${index}`} className="min-w-[320px] flex-shrink-0">
+                    <div key={`benefit-${index}`} className="min-w-[260px] sm:min-w-[320px] flex-shrink-0">
                       <Card className="h-full border-zinc-800 bg-zinc-900/90 backdrop-blur-sm shadow-lg overflow-hidden group hover:shadow-2xl hover:border-forest-500/30 transition-all duration-500">
-                        <CardContent className="p-8 h-full flex flex-col">
+                        <CardContent className="p-6 sm:p-8 h-full flex flex-col">
                           <div
-                            className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${benefit.iconBg} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500`}
+                            className={`w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br ${benefit.iconBg} flex items-center justify-center mb-4 sm:mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500`}
                           >
-                            <Icon className="h-8 w-8 text-white" />
+                            <Icon className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                           </div>
-                          <h3 className="text-2xl font-semibold text-white mb-4">{benefit.title}</h3>
-                          <p className="text-zinc-400 leading-relaxed flex-grow">{benefit.description}</p>
+                          <h3 className="text-xl sm:text-2xl font-semibold text-white mb-3 sm:mb-4">{benefit.title}</h3>
+                          <p className="text-sm sm:text-base text-zinc-400 leading-relaxed flex-grow">{benefit.description}</p>
                           <div
-                            className={`mt-6 h-1 w-full rounded-full bg-gradient-to-r ${benefit.gradient} opacity-50 group-hover:opacity-100 transition-opacity duration-500`}
+                            className={`mt-4 sm:mt-6 h-1 w-full rounded-full bg-gradient-to-r ${benefit.gradient} opacity-50 group-hover:opacity-100 transition-opacity duration-500`}
                           />
                         </CardContent>
                       </Card>

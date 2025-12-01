@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { ShoppingCart, LogOut, Package, Settings, ShoppingBag, Shield } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -151,12 +152,15 @@ export function Header() {
       <div className="relative rounded-full border border-border/50 bg-background/50 dark:bg-card/50 backdrop-blur-xl shadow-lg shadow-black/5 dark:shadow-black/20 transition-colors duration-300">
         <div className="flex h-14 sm:h-16 items-center justify-between px-4 sm:px-6 md:px-8">
           <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
-            <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-forest-600 dark:bg-forest-500 shadow-md group-hover:shadow-lg transition-all">
-              <Package className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+            <div className="relative h-10 w-40 sm:h-12 sm:w-48 transition-all opacity-70 hover:opacity-100">
+              <Image
+                src="/celutronix-logo-new.png"
+                alt="Celutronix"
+                fill
+                className="object-contain object-left"
+                priority
+              />
             </div>
-            <span className="text-sm sm:text-lg font-light tracking-tight text-foreground hidden xs:inline">
-              Proyecto <span className="font-medium">Ecommerce</span>
-            </span>
           </Link>
 
           <div className="flex items-center gap-2 sm:gap-4 md:gap-6">
