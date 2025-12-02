@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { ShoppingCart, LogOut, Package, Settings, ShoppingBag, Shield } from "lucide-react"
+import { ShoppingCart, LogOut, Package, Settings, ShoppingBag, Shield, Store } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -123,6 +123,7 @@ export function Header() {
       await supabase.auth.signOut()
       setUser(null)
       setProfile(null)
+      setCartCount(0) // Reset cart count on sign out
       toast.success("Sesión cerrada exitosamente")
       window.location.href = "/"
     } catch (error) {
@@ -178,6 +179,19 @@ export function Header() {
                 Tienda
               </Link>
             </nav>
+
+            {/* Mobile Shop Link */}
+            <Button
+              variant="ghost"
+              size="icon"
+              asChild
+              className="md:hidden h-8 w-8 sm:h-10 sm:w-10 text-foreground hover:bg-muted rounded-full"
+            >
+              <Link href="/products">
+                <Store className="h-4 w-4 sm:h-5 sm:w-5" />
+                <span className="sr-only">Tienda</span>
+              </Link>
+            </Button>
 
             {isLoading ? (
               <div className="h-8 w-8 sm:h-10 sm:w-10 animate-pulse rounded-full bg-muted" />

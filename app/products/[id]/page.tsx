@@ -9,10 +9,44 @@ import { ProductImageGallery } from "@/components/product-image-gallery"
 import { SizeGuideModal } from "@/components/size-guide-modal"
 import { getRelatedProducts } from "@/app/actions/products"
 import { ProductCard } from "@/components/product-card"
+import { Metadata } from "next"
 
 function isValidUUID(id: string): boolean {
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
   return uuidRegex.test(id)
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params
+
+  if (!isValidUUID(id)) {
+    return {
+      title: "Producto no encontrado",
+    }
+  }
+
+  const supabase = await createClient()
+  const { data: product } = await supabase.from("products").select("*").eq("id", id).single()
+
+  if (!product) {
+    return {
+      title: "Producto no encontrado",
+    }
+  }
+
+  return {
+    title: product.name,
+    description: product.description,
+    openGraph: {
+      title: product.name,
+      description: product.description,
+      images: product.images && product.images.length > 0
+        ? product.images
+        : product.image_url
+          ? [product.image_url]
+          : [],
+    },
+  }
 }
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {

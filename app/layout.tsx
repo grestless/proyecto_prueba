@@ -12,16 +12,65 @@ import { ThemeProvider } from "@/components/theme-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Urban Style - Moda Urbana Minimalista",
+  title: {
+    default: "Urban Style - Moda Urbana Minimalista",
+    template: "%s | Urban Style",
+  },
   description:
     "Descubre nuestra colección de ropa urbana minimalista. Calzado, remeras, pantalones y accesorios con estilo único.",
-  keywords: ["moda", "ropa urbana", "minimalista", "calzado", "remeras", "pantalones", "accesorios"],
+  keywords: ["moda", "ropa urbana", "minimalista", "calzado", "remeras", "pantalones", "accesorios", "argentina"],
   authors: [{ name: "Urban Style" }],
+  creator: "Urban Style",
+  publisher: "Urban Style",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL("https://v0-proyecto-prueba-six.vercel.app/"),
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Urban Style - Moda Urbana Minimalista",
     description: "Descubre nuestra colección de ropa urbana minimalista con estilo único.",
+    url: "https://v0-proyecto-prueba-six.vercel.app/",
+    siteName: "Urban Style",
+    images: [
+      {
+        url: "/og-image.jpg", // Ensure this image exists or use a placeholder
+        width: 1200,
+        height: 630,
+        alt: "Urban Style",
+      },
+    ],
+    locale: "es_AR",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Urban Style - Moda Urbana Minimalista",
+    description: "Descubre nuestra colección de ropa urbana minimalista.",
+    creator: "@urbanstyle",
+    images: ["/og-image.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
   generator: 'v0.app'
 }
 

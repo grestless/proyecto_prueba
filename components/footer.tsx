@@ -15,12 +15,14 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
       >
         <span className="text-sm sm:text-base text-zinc-300 font-medium pr-4">{question}</span>
         <ChevronDown
-          className={`h-4 w-4 sm:h-5 sm:w-5 text-forest-400 flex-shrink-0 transition-transform duration-300 ${
-            isOpen ? "rotate-180" : ""
-          }`}
+          className={`h-4 w-4 sm:h-5 sm:w-5 text-forest-400 flex-shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180" : ""
+            }`}
         />
       </button>
-      <div className={`overflow-hidden transition-all duration-300 ${isOpen ? "max-h-96 pb-4" : "max-h-0"}`}>
+      <div
+        id={`faq-answer-${question.replace(/\s+/g, '-').toLowerCase()}`}
+        className={`overflow-hidden transition-all duration-300 ${isOpen ? "max-h-96 pb-4" : "max-h-0"}`}
+      >
         <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">{answer}</p>
       </div>
     </div>
