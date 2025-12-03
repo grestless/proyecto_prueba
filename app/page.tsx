@@ -16,8 +16,8 @@ export default async function HomePage() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Urban Style",
-    url: "https://urban-style-demo.vercel.app",
-    logo: "https://urban-style-demo.vercel.app/celutronix-logo-new.png",
+    url: "https://celutronix.vercel.app",
+    logo: "https://celutronix.vercel.app/celutronix-logo-new.png",
     sameAs: [
       "https://facebook.com/urbanstyle",
       "https://instagram.com/urbanstyle",

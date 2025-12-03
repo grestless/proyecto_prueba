@@ -27,14 +27,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://v0-proyecto-prueba-six.vercel.app/"),
+  metadataBase: new URL("https://celutronix.vercel.app/"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: "Urban Style - Moda Urbana Minimalista",
     description: "Descubre nuestra colección de ropa urbana minimalista con estilo único.",
-    url: "https://v0-proyecto-prueba-six.vercel.app/",
+    url: "https://celutronix.vercel.app/",
     siteName: "Urban Style",
     images: [
       {
