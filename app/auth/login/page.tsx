@@ -10,11 +10,12 @@ import Link from "next/link"
 import { useRouter } from 'next/navigation'
 import { useState } from "react"
 import toast from "react-hot-toast"
-import { Lock, Mail, ArrowRight, Sparkles, ShieldCheck, Zap, Heart } from 'lucide-react'
+import { Lock, Mail, ArrowRight, Sparkles, ShieldCheck, Zap, Heart, Eye, EyeOff } from 'lucide-react'
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
@@ -24,10 +25,19 @@ export default function LoginPage() {
 
     try {
       const supabase = createClient()
-      const { data, error } = await supabase.auth.signInWithPassword({
+
+      // Create a promise that rejects after 10 seconds
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error("La operación tardó demasiado. Por favor, verifica tu conexión.")), 10000)
+      })
+
+      const loginPromise = supabase.auth.signInWithPassword({
         email,
         password,
       })
+
+      // Race the login against the timeout
+      const { data, error } = await Promise.race([loginPromise, timeoutPromise]) as any
 
       if (error) {
         if (error.message.includes("Invalid login credentials")) {
@@ -46,11 +56,17 @@ export default function LoginPage() {
       }
 
       toast.success("¡Bienvenido de nuevo!")
-      await new Promise((resolve) => setTimeout(resolve, 500))
-      window.location.href = "/products"
+
+      // Use router for smoother transition, but refresh to ensure auth state is picked up
+      router.refresh()
+      router.push("/products")
     } catch (error) {
       console.error("[v0] Unexpected login error:", error)
-      toast.error("Error inesperado. Por favor, intenta nuevamente.")
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else {
+        toast.error("Error inesperado. Por favor, intenta nuevamente.")
+      }
     } finally {
       setIsLoading(false)
     }
@@ -166,12 +182,26 @@ export default function LoginPage() {
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <Input
                       id="password"
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="pl-10 h-11 bg-background border-input focus:border-primary"
+                      className="pl-10 pr-10 h-11 bg-background border-input focus:border-primary"
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
+                      <span className="sr-only">
+                        {showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                      </span>
+                    </button>
                   </div>
                 </div>
 

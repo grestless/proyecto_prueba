@@ -124,9 +124,21 @@ export function EditProductDialog({ product, onClose }: EditProductDialogProps) 
         return
       }
 
+      // Check session before proceeding
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+      if (sessionError || !session) {
+        toast.error("Tu sesión ha expirado. Por favor, recarga la página e inicia sesión nuevamente.")
+        return
+      }
+
       const priceInCents = Math.round(priceInDollars * 100)
 
-      const { error } = await supabase
+      // Create a promise that rejects after 10 seconds
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error("La operación tardó demasiado. Por favor, verifica tu conexión.")), 10000)
+      })
+
+      const updatePromise = supabase
         .from("products")
         .update({
           name: formData.get("name") as string,
@@ -141,6 +153,9 @@ export function EditProductDialog({ product, onClose }: EditProductDialogProps) 
           updated_at: new Date().toISOString(),
         })
         .eq("id", product.id)
+
+      // Race the update against the timeout
+      const { error } = await Promise.race([updatePromise, timeoutPromise]) as any
 
       if (error) {
         console.error("[v0] Error updating product:", error)

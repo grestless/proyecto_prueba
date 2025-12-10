@@ -25,7 +25,7 @@ export function FeaturedProductsSection({ featuredProducts, loading }: FeaturedP
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
-                    className="mb-12 md:mb-16"
+                    className="mb-12 md:mb-16 pb-8 md:pb-0"
                 >
                     <Badge className="bg-forest-500/20 text-forest-300 border-forest-500/30 mb-3 md:mb-4 px-3 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm">
                         Lo más popular
