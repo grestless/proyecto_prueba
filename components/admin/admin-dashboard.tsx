@@ -21,19 +21,41 @@ export function AdminDashboard({ products, orders, users }: AdminDashboardProps)
   const currentDate = new Date()
   const [selectedMonth, setSelectedMonth] = useState<string>(currentDate.getMonth().toString())
   const [selectedYear, setSelectedYear] = useState<string>(currentDate.getFullYear().toString())
+  const [selectedStatus, setSelectedStatus] = useState<"pending" | "completed">("pending")
 
-  // Filter orders by selected month and year
+  // Filter orders by selected month, year, and status
   const filteredOrders = orders.filter((order) => {
+    const orderDate = new Date(order.created_at)
+    const matchesDate =
+      orderDate.getMonth().toString() === selectedMonth && orderDate.getFullYear().toString() === selectedYear
+
+    // For status filtering
+    if (selectedStatus === "pending") {
+      return matchesDate && order.status === "pending"
+    } else {
+      return matchesDate && order.status === "completed"
+    }
+  })
+
+  // Calculate stats based on filtered orders (or all orders for the month?)
+  // The original code calculated stats based on "filteredOrders" which was just date-filtered.
+  // We should probably keep a separate "dateFilteredOrders" for stats if we want stats to show everything for the month,
+  // OR we accept that stats now reflect the view. 
+  // User asked to "make order history more useful". 
+  // Usually stats like "Monthly Revenue" should include ALL orders for the month, not just pending ones.
+
+  const ordersInMonth = orders.filter((order) => {
     const orderDate = new Date(order.created_at)
     return (
       orderDate.getMonth().toString() === selectedMonth && orderDate.getFullYear().toString() === selectedYear
     )
   })
 
-  // Calculate stats based on filtered orders
-  const monthlyOrdersCount = filteredOrders.length
-  const monthlyCompletedOrders = filteredOrders.filter((o) => o.status === "completed").length
-  const monthlyRevenue = filteredOrders.reduce((sum, order) => sum + order.total, 0)
+  const monthlyOrdersCount = ordersInMonth.length
+  const monthlyCompletedOrders = ordersInMonth.filter((o) => o.status === "completed").length
+  const monthlyRevenue = ordersInMonth
+    .filter((o) => o.status === "completed")
+    .reduce((sum, order) => sum + order.total, 0)
 
   const totalUsers = users.length
 
@@ -180,11 +202,37 @@ export function AdminDashboard({ products, orders, users }: AdminDashboardProps)
 
         <TabsContent value="orders">
           <Card className="border-zinc-800 bg-zinc-900/50 backdrop-blur-sm">
-            <CardHeader>
+            <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <CardTitle className="text-forest-300">Gestión de Pedidos</CardTitle>
+              <div className="flex bg-zinc-950 p-1 rounded-lg border border-zinc-800">
+                <button
+                  onClick={() => setSelectedStatus("pending")}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${selectedStatus === "pending"
+                    ? "bg-yellow-900/30 text-yellow-300 shadow-sm"
+                    : "text-zinc-400 hover:text-zinc-200"
+                    }`}
+                >
+                  Pendientes
+                </button>
+                <button
+                  onClick={() => setSelectedStatus("completed")}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${selectedStatus === "completed"
+                    ? "bg-forest-900/30 text-forest-300 shadow-sm"
+                    : "text-zinc-400 hover:text-zinc-200"
+                    }`}
+                >
+                  Completados
+                </button>
+              </div>
             </CardHeader>
             <CardContent className="text-forest-400/90 p-2 sm:p-6">
-              <OrdersTable orders={orders} />
+              <div className="mb-4 text-xs text-forest-400/60">
+                Mostrando pedidos {selectedStatus === "pending" ? "pendientes" : "completados"} de {currentMonthLabel} {selectedYear}
+              </div>
+              <OrdersTable
+                orders={filteredOrders}
+                emptyMessage={`No hay pedidos ${selectedStatus === "pending" ? "pendientes" : "completados"} para este mes`}
+              />
             </CardContent>
           </Card>
         </TabsContent>

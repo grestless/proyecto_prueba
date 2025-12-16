@@ -35,7 +35,7 @@ export function CategoriesSection() {
                         {
                             name: "Pantalones",
                             description: "Comodidad y estilo urbano",
-                            image: "/mannequin-wearing-grey-pants-on-dark-grey-backgrou.jpg",
+                            image: "/mannequin-pants-new.png",
                         },
                         {
                             name: "Calzado",
@@ -56,7 +56,7 @@ export function CategoriesSection() {
                             transition={{ duration: 0.6, delay: index * 0.1 }}
                         >
                             <Link href={`/products?category=${category.name}`}>
-                                <Card className="group relative aspect-[3/4] overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-500 cursor-pointer bg-zinc-800">
+                                <Card className="group relative aspect-[3/4] overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-500 cursor-pointer bg-zinc-800 p-0">
                                     <div className="absolute inset-0">
                                         <Image
                                             src={category.image || "/placeholder.svg"}
@@ -80,7 +80,7 @@ export function CategoriesSection() {
                                         </div>
                                     </div>
 
-                                    <div className="absolute inset-0 border-2 border-forest-500/0 group-hover:border-forest-500/50 rounded-lg transition-all duration-500" />
+                                    <div className="absolute inset-0 border-2 border-forest-500/0 group-hover:border-forest-500/50 rounded-xl transition-all duration-500" />
                                 </Card>
                             </Link>
                         </motion.div>

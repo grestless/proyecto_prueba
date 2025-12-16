@@ -6,9 +6,10 @@ import type { Order, OrderItem } from "@/types"
 
 interface OrdersTableProps {
   orders: (Order & { profiles: { email: string; name: string | null } | null; order_items: OrderItem[] })[]
+  emptyMessage?: string
 }
 
-export function OrdersTable({ orders }: OrdersTableProps) {
+export function OrdersTable({ orders, emptyMessage = "No se encontraron pedidos" }: OrdersTableProps) {
   const formatPrice = (cents: number) => {
     return new Intl.NumberFormat("es-AR", {
       style: "currency",
@@ -87,7 +88,7 @@ export function OrdersTable({ orders }: OrdersTableProps) {
           ) : (
             <TableRow>
               <TableCell colSpan={6} className="text-center text-white py-8">
-                No se encontraron pedidos
+                {emptyMessage}
               </TableCell>
             </TableRow>
           )}
