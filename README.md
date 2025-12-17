@@ -1,4 +1,4 @@
-# WellnessShop - E-Commerce Platform
+# Celutronix - E-Commerce Platform
 
 A production-ready e-commerce platform built with Next.js, Supabase, and Stripe. Features a complete shopping experience with authentication, product catalog, shopping cart, checkout, user profiles, and admin dashboard.
 

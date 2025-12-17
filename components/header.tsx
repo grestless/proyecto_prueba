@@ -153,10 +153,10 @@ export function Header() {
       <div className="relative rounded-full border border-border/50 bg-background/50 dark:bg-card/50 backdrop-blur-xl shadow-lg shadow-black/5 dark:shadow-black/20 transition-colors duration-300">
         <div className="flex h-14 sm:h-16 items-center justify-between px-4 sm:px-6 md:px-8">
           <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
-            <div className="relative h-10 w-40 sm:h-12 sm:w-48 transition-all opacity-70 hover:opacity-100">
+            <div className="relative h-10 w-40 sm:h-12 sm:w-48 transition-all opacity-85 hover:opacity-100">
               <Image
-                src="/celutronix-logo-new.png"
-                alt="Celutronix"
+                src="/logoNuevoUrban.png"
+                alt="Urban Style"
                 fill
                 className="object-contain object-left"
                 priority
